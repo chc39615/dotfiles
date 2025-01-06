@@ -99,7 +99,8 @@ remove_existing_files() {
     local target_folder=$2
 
     # Loop through all files and directories in the stow folder
-    for file in "$stow_folder"/*; do
+    for file in "$stow_folder"/{*,.*}; do
+        [[ "$(basename "$file")" == "." || "$(basename "$file")" == ".." ]] && continue
         # Check if the item is a file or directory
         if [[ -f "$file" || -d "$file" ]]; then
             local filename=$(basename "$file")
@@ -132,7 +133,9 @@ move_existing_files_to_backup() {
     mkdir -p "$backup_folder"
 
     # Loop through all files and directories in the stow folder
-    for file in "$stow_folder"/*; do
+    for file in "$stow_folder"/{*,.*}; do
+        [[ "$(basename "$file")" == "." || "$(basename "$file")" == ".." ]] && continue
+
         # Check if the item is a file or directory
         if [[ -f "$file" || -d "$file" ]]; then
             local filename=$(basename "$file")
