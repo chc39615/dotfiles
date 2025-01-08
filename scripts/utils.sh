@@ -9,39 +9,26 @@ install_package() {
 
     echo "Checking if $PACKAGE_NAME is already installed..."
 
-    # Check if the package is already installed
-    if command -v "$PACKAGE_NAME" &> /dev/null; then
-        echo "$PACKAGE_NAME is already installed."
+    # Determine the installed version using pacman if available
+    if command -v pacman &> /dev/null; then
+        INSTALLED_VERSION=$(pacman -Qi "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}' || echo "not installed")
+    else
+        INSTALLED_VERSION="not available for this OS"
+    fi
 
-        # Try to get the installed version
-        INSTALLED_VERSION=$("$PACKAGE_NAME" --version 2>/dev/null || "$PACKAGE_NAME" -v 2>/dev/null || echo "Version information not available.")
-        echo "Installed version/info: $INSTALLED_VERSION"
+    if [[ "$INSTALLED_VERSION" != "not installed" ]]; then
+        echo "$PACKAGE_NAME is already installed."
+        echo "Installed version: $INSTALLED_VERSION"
     else
         echo "$PACKAGE_NAME is not installed."
     fi
 
     # Get the repository version of the package
     echo "Checking the repository version of $PACKAGE_NAME..."
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if command -v apt &> /dev/null; then
-            REPO_VERSION=$(apt-cache policy "$PACKAGE_NAME" 2>/dev/null | grep Candidate | awk '{print $2}' || echo "Repository version not available.")
-        elif command -v yum &> /dev/null; then
-            REPO_VERSION=$(yum info "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}' || echo "Repository version not available.")
-        elif command -v dnf &> /dev/null; then
-            REPO_VERSION=$(dnf info "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}' || echo "Repository version not available.")
-        elif command -v pacman &> /dev/null; then
-            REPO_VERSION=$(pacman -Si "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}' || echo "Repository version not available.")
-        else
-            REPO_VERSION="Repository version not available."
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        if command -v brew &> /dev/null; then
-            REPO_VERSION=$(brew info "$PACKAGE_NAME" | grep -m 1 "$PACKAGE_NAME:" | awk '{print $2}' || echo "Repository version not available.")
-        else
-            REPO_VERSION="Repository version not available."
-        fi
+    if command -v pacman &> /dev/null; then
+        REPO_VERSION=$(pacman -Si "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}' || echo "Repository version not available.")
     else
-        REPO_VERSION="Repository version not available."
+        REPO_VERSION="not available for this OS"
     fi
 
     echo "Repository version: $REPO_VERSION"
@@ -55,42 +42,24 @@ install_package() {
 
     echo "Starting installation of $PACKAGE_NAME..."
 
-    # Install the package using the appropriate package manager
-    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        if command -v apt &> /dev/null; then
-            sudo apt update && sudo apt install -y "$PACKAGE_NAME"
-        elif command -v yum &> /dev/null; then
-            sudo yum install -y epel-release && sudo yum install -y "$PACKAGE_NAME"
-        elif command -v dnf &> /dev/null; then
-            sudo dnf install -y "$PACKAGE_NAME"
-        elif command -v pacman &> /dev/null; then
-            sudo pacman -Syu --noconfirm "$PACKAGE_NAME"
-        else
-            echo "Unsupported package manager. Please install $PACKAGE_NAME manually."
-            return 1
-        fi
-    elif [[ "$OSTYPE" == "darwin"* ]]; then
-        if command -v brew &> /dev/null; then
-            brew install "$PACKAGE_NAME"
-        else
-            echo "Homebrew not found. Installing Homebrew..."
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            brew install "$PACKAGE_NAME"
-        fi
+    # Install the package using pacman if available
+    if command -v pacman &> /dev/null; then
+        sudo pacman -Syu --noconfirm "$PACKAGE_NAME"
     else
-        echo "Unsupported operating system. Please install $PACKAGE_NAME manually."
+        echo "Unsupported package manager for this OS. Please install $PACKAGE_NAME manually."
         return 1
     fi
 
     # Verify installation
-    if command -v "$PACKAGE_NAME" &> /dev/null; then
-        echo "$PACKAGE_NAME installed successfully!"
-        "$PACKAGE_NAME" --version 2>/dev/null || echo "$PACKAGE_NAME installed, but no version information available."
+    if pacman -Qi "$PACKAGE_NAME" &> /dev/null; then
+        INSTALLED_VERSION=$(pacman -Qi "$PACKAGE_NAME" | grep Version | awk '{print $3}')
+        echo "$PACKAGE_NAME installed successfully! Version: $INSTALLED_VERSION"
     else
         echo "Installation failed. Please try installing $PACKAGE_NAME manually."
         return 1
     fi
 }
+
 
 
 # Function to remove files or directories from target folder
