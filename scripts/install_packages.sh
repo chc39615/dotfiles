@@ -6,6 +6,5 @@ DOTFILES_DIR="$HOME/dotfiles"
 # Source the utils.sh file to use the install_package function
 source "$DOTFILES_DIR/scripts/utils.sh"
 
-# use the install_package function to install stow
-install_package stow
-
+# install lazygit
+install_package lazygit

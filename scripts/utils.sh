@@ -11,9 +11,14 @@ install_package() {
 
     # Determine the installed version using pacman if available
     if command -v pacman &> /dev/null; then
-        INSTALLED_VERSION=$(pacman -Qi "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}' || echo "not installed")
+        INSTALLED_VERSION=$(pacman -Qi "$PACKAGE_NAME" 2>/dev/null | grep Version | awk '{print $3}')
     else
         INSTALLED_VERSION="not available for this OS"
+    fi
+
+    # Check if pacman -Qi failed or INSTALLED_VERSION is empty
+    if [[ -z "$INSTALLED_VERSION" ]]; then
+        INSTALLED_VERSION="not installed"
     fi
 
     if [[ "$INSTALLED_VERSION" != "not installed" ]]; then
@@ -37,6 +42,7 @@ install_package() {
     read -p "Do you want to install/reinstall $PACKAGE_NAME? (y/n): " CHOICE
     if [[ "$CHOICE" != "y" && "$CHOICE" != "Y" ]]; then
         echo "Skipping installation of $PACKAGE_NAME."
+        echo "------------------------------------------------------------"
         return 0
     fi
 
@@ -47,6 +53,7 @@ install_package() {
         sudo pacman -Syu --noconfirm "$PACKAGE_NAME"
     else
         echo "Unsupported package manager for this OS. Please install $PACKAGE_NAME manually."
+        echo "------------------------------------------------------------"
         return 1
     fi
 
@@ -54,10 +61,13 @@ install_package() {
     if pacman -Qi "$PACKAGE_NAME" &> /dev/null; then
         INSTALLED_VERSION=$(pacman -Qi "$PACKAGE_NAME" | grep Version | awk '{print $3}')
         echo "$PACKAGE_NAME installed successfully! Version: $INSTALLED_VERSION"
+        echo "------------------------------------------------------------"
     else
         echo "Installation failed. Please try installing $PACKAGE_NAME manually."
+        echo "------------------------------------------------------------"
         return 1
     fi
+
 }
 
 
