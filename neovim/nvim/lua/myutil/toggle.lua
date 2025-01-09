@@ -35,6 +35,47 @@ function M.option(option, silent, values)
 	end
 end
 
+
+M._maximized = nil
+--- Zoom in, out the windows.
+--- it will redistribution each window equally, if there is no
+--- window has winwigth, winheigh, winminwidth, winminheight 
+--- check the neovim help :wincmd =
+---@param state boolean?
+function M.maximize(state)
+	if state == (M._maximized ~= nil) then
+		return
+	end
+	if M._maximized then
+		for _, opt in ipairs(M._maximized) do
+			vim.o[opt.k] = opt.v
+		end
+		M._maximized = nil
+		vim.cmd("wincmd =")
+	else
+		M._maximized = {}
+		local function set(k, v)
+			table.insert(M._maximized, 1, { k = k, v = vim.o[k] })
+			vim.o[k] = v
+		end
+		set("winwidth", 999)
+		set("winheight", 999)
+		set("winminwidth", 10)
+        set("winminheight", 4)
+		vim.cmd("wincmd =")
+	end
+	-- `QuitPre` seems to be executed even if we quit a normal window, so we don't want that
+	-- `VimLeavePre` might be another consideration? Not sure about differences between the 2
+	vim.api.nvim_create_autocmd("ExitPre", {
+		once = true,
+		group = vim.api.nvim_create_augroup("lazyvim_restore_max_exit_pre", { clear = true }),
+		desc = "Restore width/height when close Neovim while maximized",
+		callback = function()
+			M.maximize(false)
+		end,
+	})
+end
+
 setmetatable(M, {
 	__call = function(m, ...)
 		return m.option(...)
