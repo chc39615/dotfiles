@@ -27,7 +27,7 @@ return {
 
                 ["<cr>"] = { 'accept', 'fallback' },
 
-                ["<C-e>"] = { function(cmp) cmp.show({ providers = { 'snippets' } }) end },
+                -- ["<C-e>"] = { function(cmp) cmp.show({ providers = { 'snippets' } }) end },
             },
 
             completion = {
