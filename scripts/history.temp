@@ -1,0 +1,500 @@
+    6  tar -xf pulseaudio-17.0.tar.xz 
+    7  ls
+    8  cd pulseaudio-17.0
+    9  ls
+   10  cd ..
+   11  ls
+   12  cd ..
+   13  cd workspace/
+   14  ls
+   15  git clone https://aur.archlinux.org/pulseaudio-git.git
+   16  cd pulseaudio-git/
+   17  ls
+   18  git log --oneline -10
+   19  git log --oneline -20
+   20  ls
+   21  cd pulseaudio.install 
+   22  cat pulseaudio.install 
+   23  ls
+   24  cat PKGBUILD 
+   25  nvim PKGBUILD 
+   26  cd Downloads/
+   27  ls
+   28  clear
+   29  exit
+   30  wget https://archive.archlinux.org/packages/p/pulseaudio/pulseaudio-17.0-1-x86_64.pkg.tar.zst
+   31  sudo pacman -S wget
+   32  wget https://archive.archlinux.org/packages/p/pulseaudio/pulseaudio-17.0-1-x86_64.pkg.tar.zst
+   33  sudo pacman -U pulseaudio-17.0-1-x86_64.pkg.tar.zst 
+   34  pacman -Qi pulseaudio libpulse
+   35  cd Downloads/
+   36  ls
+   37  cd pulseaudio-17.0
+   38  ls
+   39  sudo pacman -S --needed meson ninja pkgconf gcc make
+   40  meson setup build --prefix=/usr --buildtype=release
+   41  meson compile -C build
+   42  sudo meson install -C build
+   43  pulseaudio --version
+   44  reboot
+   45  sudo reboot
+   46  ping unraid.lan
+   47  systemctl --user status pulseaudio
+   48  sudo pacman -Si pulseaudio
+   49  pwd
+   50  cd Downloads/
+   51  ls
+   52  cd pulseaudio-17.0
+   53  makepkg
+   54  ip addr
+   55  cd ~/.config
+   56  ls
+   57  ls | grep kwallet
+   58  cat kwalletrc 
+   59  rm kwalletrc 
+   60  cd share
+   61  cd ..
+   62  cd .local
+   63  cd share
+   64  ls
+   65  cd kwalletd/
+   66  ls
+   67  rm *
+   68  ls
+   69  exit
+   70  cd ~/.local/share/
+   71  ls
+   72  nvim user-places.xbel
+   73  exit
+   74  ip addr
+   75  ls -lha
+   76  cd .config
+   77  ls
+   78  ccd ..
+   79  cd ..
+   80  stow --adopt -nv nvim
+   81  cd dotfiles/
+   82  ls
+   83  stow --adopt -nv nvim
+   84  ls
+   85  cd nvim
+   86  stow -tnv $HOME
+   87  stow -nv -t $HOME
+   88  ls
+   89  ls
+   90  pwd
+   91  ls
+   92  ls -lha
+   93  stow -nv -t $HOME
+   94  stow -t $HOME/.config/nvim
+   95  stow -nv .
+   96  cd ..
+   97  stow -nv -t ~/.config nvim
+   98  stow -nv -t ~/.config nvim
+   99  stow -nv -t ~/.config nvim
+  100  stow -t ~/.config nvim
+  101  ls
+  102  cd ~/.config
+  103  ls -l
+  104  rm lazy-lock.json 
+  105  rm init.lua 
+  106  ls
+  107  pwd
+  108  stow -t ~/.config nvim
+  109  cd ~/.config
+  110  ls
+  111  ls -l
+  112  cd nvim
+  113  ls
+  114  ls -l
+  115  cd ..
+  116  cd ..
+  117  ls -lha
+  118  cd .config
+  119  ls
+  120  rm -rf nvim/
+  121  cd ~/dotfiles/
+  122  stow -t ~/.config nvim
+  123  cd ~/.config
+  124  ls
+  125  ls -lha
+  126  rm .config
+  127  cd -
+  128  stow -t ~/.config nvim
+  129  cd ~/.config
+  130  ls -l
+  131  rm init.lua 
+  132  rm lazy-lock.json 
+  133  rm -rf lua/
+  134  ls -l
+  135  rm -rf lua
+  136  ls -l
+  137  cd -
+  138  ls
+  139  stow -t ~/.config nvim
+  140  stow -t ~/.config neovim
+  141  ls -l ~/.config
+  142  nvim nvim
+  143  cd nvim
+  144  ls
+  145  cd nvim 
+  146  cd ~/.config
+  147  ls -l
+  148  cd nvim
+  149  ls
+  150  cd lua
+  151  ls
+  152  cd ..
+  153  nvim .
+  154  rm nvim
+  155  cd ..
+  156  rm nvim
+  157  ls
+  158  ls -l
+  159  cd ~/dotfiles/
+  160  ls
+  161  cd neovim
+  162  cd ~/.config
+  163  ls -l
+  164  rm nvim
+  165  cp -r ~/dotfiles/neovim/nvim/* ./
+  166  ls -l
+  167  cd lua
+  168  ls
+  169  cd config
+  170  ls
+  171  cd ..
+  172  ls
+  173  ls -lha | grep init.lua
+  174  ls | grep init
+  175  ls -l
+  176  cd ..
+  177  ls | grep init.lua
+  178  ls | grep lazy
+  179  nvim nvim
+  180  cd ~/dotfiles/
+  181  ls
+  182  ./scripts/stow_nvim.sh 
+  183  ls
+  184  cd backup/
+  185  ls
+  186  cd neovim
+  187  ls
+  188  cd nvim
+  189  ls
+  190  cd lua
+  191  ls
+  192  cd config 
+  193  ls
+  194  cd ..
+  195  cd ..
+  196  ls
+  197  cd lua
+  198  ls
+  199  cd myutil/
+  200  ls
+  201  cd ..
+  202  cd ii
+  203  cd ...
+  204  ls
+  205  cd ..
+  206  ls
+  207  cd ..
+  208  ls
+  209  cd ..
+  210  ls
+  211  cd ..
+  212  rm -rf backup/
+  213  cd ~/.config/
+  214  ls
+  215  ls -l
+  216  exit
+  217  ls
+  218  sudo pacman -S stow
+  219  mkdir dotfiles
+  220  cd dotfiles
+  221  ls
+  222  mkdir bash
+  223  ls -lha ~
+  224  cat ~/.bash_logout 
+  225  cat ~/.bash_history 
+  226  ls -lha ~
+  227  cat .bash_profile
+  228  cat ~/.bash_profile
+  229  mv .bashrc .bash_profile ~/dotfiles/bash/
+  230  mv ~/.bashrc ~/.bash_profile ~/dotfiles/bash/
+  231  ls -lha ~
+  232  cd ~/dotfiles/
+  233  stow -t ~ bash
+  234  ls -lha ~
+  235  cd bash/
+  236  ls
+  237  ls
+  238  ls -lha
+  239  touch README.md
+  240  nvim .
+  241  nvim README.md 
+  242  nvim .
+  243  cd ..
+  244  mkdir scripts.sh
+  245  rm scripts.sh
+  246  rm scripts.sh/
+  247  mv scripts.sh/ scripts
+  248  ls
+  249  cd scripts
+  250  ls
+  251  touch bash.sh
+  252  nvim bash.sh
+  253  echo $OSTYEP
+  254  echo $OSTYPE
+  255  fg
+  256  ls
+  257  ./install_stow
+  258  ls -l
+  259  chmod +x install_stow.sh
+  260  ./install_stow.sh 
+  261  fg
+  262  ./install_stow.sh 
+  263  fg
+  264  ls
+  265  fg
+  266  ls
+  267  ./install_stow.sh 
+  268  fg
+  269  ls
+  270  mv bash.sh stow_bash.sh
+  271  ls
+  272  cd ..
+  273  ls
+  274  cp -r ~/.config/nvim .
+  275  cd ..
+  276  ls
+  277  cd .config
+  278  ls -l
+  279  mkdir nvim
+  280  mkdir lua
+  281  rm -r lua
+  282  cd nvim
+  283  mkdir lua
+  284  touch init.lua
+  285  cd lua
+  286  mkdir config
+  287  cd config
+  288  touch options.lua
+  289  nvim options.lua
+  290  cd ..
+  291  ls
+  292  cd ..
+  293  ls
+  294  nvim init.lua
+  295  ls
+  296  cd myutil
+  297  ls
+  298  cd ..
+  299  nvim .
+  300  nvim .
+  301  ls
+  302  mv myutil lua/
+  303  cd lua
+  304  ls
+  305  cd ..
+  306  nvim .
+  307  ls
+  308  cd lua
+  309  ls
+  310  cd config
+  311  ls
+  312  cd ..
+  313  jobs
+  314  fg
+  315  cd ..
+  316  nvim .
+  317  nvim .
+  318  nvim .
+  319  nvim .
+  320  nvim .
+  321  nvim .
+  322  nvim .
+  323  nvim .
+  324  nvim .
+  325  nvim .
+  326  ls
+  327  ls lua
+  328  ls lua/config/
+  329  nvim init.lua 
+  330  nvim .
+  331  nvim .
+  332  nvim .
+  333  nvim .
+  334  nvim .
+  335  nvim .
+  336  nvim .
+  337  nvim .
+  338  nvim .
+  339  nvim .
+  340  nvim .
+  341  nvim .
+  342  nvim .
+  343  nvim .
+  344  nvim .
+  345  nvim .
+  346  nvim .
+  347  nvim .
+  348  nvim .
+  349  nvim .
+  350  nvim .
+  351  nvim .
+  352  nvim .
+  353  nvim .
+  354  nvim .
+  355  nvim .
+  356  nvim .
+  357  nvim .
+  358  nvim .
+  359  nvim .
+  360  nvim .
+  361  cd ..
+  362  cd ..
+  363  cd dotfiles/
+  364  ls
+  365  mkdir nvim
+  366  cp -r ~/.config/nvim/* ./nvim/
+  367  ls ./nvim/
+  368  cd nvim
+  369  cd lua
+  370  ls
+  371  cd cofig
+  372  cd confid
+  373  cd config
+  374  ls
+  375  cd ..
+  376  cd ..
+  377  cd ..
+  378  cd nvim
+  379  ls
+  380  ls
+  381  cd ..
+  382  ls
+  383  cd scripts/
+  384  ls
+  385  nvim stow_nvim.sh
+  386  ls
+  387  chmod +x stow_nvim.sh
+  388  ./stow_nvim.sh 
+  389  fg
+  390  ./stow_nvim.sh 
+  391  fg
+  392  ./stow_nvim.sh 
+  393  ls -l ~/.config
+  394  fg
+  395  nvim .
+  396  ls
+  397  nvim stow_bash.sh 
+  398  exit
+  399  ls
+  400  cd dotfiles
+  401  git init
+  402  git branch -m main
+  403  git status
+  404  git add .
+  405  ls
+  406  git commit -m init
+  407  git config --global user.email yaoyuan@doinlab.com
+  408  git config --global user.name yaoyuan
+  409  git commit -m init
+  410  cd scripts/
+  411  ls
+  412  nvim init_git_global.sh
+  413  chmod +x init_git_global.sh 
+  414  cd ..
+  415  ls
+  416  ls -lh ~
+  417  ls -lha ~
+  418  cat .gitconfig
+  419  cd ~
+  420  cat .gitconfig
+  421  cd dotfiles/scripts/init_git_global.sh 
+  422  nvim dotfiles/scripts/init_git_global.sh 
+  423  cd dotfiles/
+  424  git status
+  425  git add .
+  426  git commit -m add init git script
+  427  git commit -m "add init git script"
+  428  git status
+  429  git remote add origin https://github.com/chc39615/dotfiles.git
+  430  git push -u origin main
+  431  git push -u origin main
+  432  git pull
+  433  git branch --set-upstream-to=origin/main main
+  434  git pull
+  435  git config pull.rebase true
+  436  git pull
+  437  git push
+  438  git config --global credential.helper store
+  439  ls
+  440  nvim scripts/init_git_global.sh 
+  441  ./scripts/init_git_global.sh 
+  442  nvim scripts/init_git_global.sh 
+  443  ./scripts/init_git_global.sh 
+  444  cat ~/.gitconfig 
+  445  git push
+  446  git fetche
+  447  git fetch
+  448  git pull
+  449  git push
+  450  ls
+  451  cd scripts/
+  452  nvim PST.temp
+  453  cd ~/.config
+  454  ls | grep kde*
+  455  ls | grep kde
+  456  ls | grep plasma*
+  457  ls | grep plasma
+  458  cd -
+  459  cd ..
+  460  git pull
+  461  git push
+  462  git config --global credential.helper kwallet
+  463  git push
+  464  cd ~/workspace/
+  465  git clone https://aur.archlinux.org/git-credential-manager.git
+  466  cd git-credential-manager/
+  467  ls
+  468  makepkg -si
+  469  cd -
+  470  cd ~/dotfiles/
+  471  git pull
+  472  git push
+  473  ./scripts/init_git_global.sh 
+  474  git push
+  475  git push
+  476  cat ~/.gitcredential
+  477  ls -lha ~
+  478  cat ~/.git-credentials 
+  479  ls
+  480  git config --global set credential.helper libsecret
+  481  git set  config --global credential.helper libsecret
+  482  git config --global credential.helper libsecret
+  483  cat ~/.gitconfig 
+  484  git push
+  485  git push
+  486  nvim scripts/init_git_global.sh 
+  487  fg
+  488  rm ~/.git-credentials 
+  489  git status
+  490  ip addr
+  491  sudo pacman -S git-credential-libsecret kwalletmanager
+  492  sudo pacman -S  kwalletmanager
+  493  lspci
+  494  sudo dmesg | grep vga
+  495  sudo modprobe nvidia
+  496  sudo modprobe i91
+  497  ip addr
+  498  cd dotfiles/
+  499  ls
+  500  cd scripts/
+  501  ls
+  502  chmod +x stow_bash.sh 
+  503  ls
+  504  history
+  505  history > history.temp
