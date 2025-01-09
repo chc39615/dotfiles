@@ -19,12 +19,10 @@ return {
             -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
             -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
             -- See the full "keymap" documentation for information on defining your own keymap.
-            keymap = { 
+            keymap = {
                 preset = 'default',
-                
                 ["<up>"] = { 'select_prev', 'fallback' },
                 ["<down>"] = { 'select_next', 'fallback' },
-
                 ["<cr>"] = { 'accept', 'fallback' },
 
                 -- ["<C-e>"] = { function(cmp) cmp.show({ providers = { 'snippets' } }) end },
@@ -45,7 +43,6 @@ return {
 
             },
 
-            
             appearance = {
                 -- Sets the fallback highlight groups to nvim-cmp's highlight groups
                 -- Useful for when your theme doesn't support blink.cmp
@@ -60,6 +57,14 @@ return {
             -- elsewhere in your config, without redefining it, due to `opts_extend`
             sources = {
                 default = { 'lsp', 'path', 'snippets', 'buffer' },
+                providers = {
+                    lazydev = {
+                        name = "LazyDev",
+                        module = "lazydev.integrations.blink",
+                        -- make lazydev completions top priority
+                        score_offset = 100,
+                    }
+                }
             },
         },
         opts_extend = { "sources.default" }
