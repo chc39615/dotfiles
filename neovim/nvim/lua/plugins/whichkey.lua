@@ -13,9 +13,7 @@ return {
             local wk = require("which-key")
             wk.setup(opts)
 
-
             local keymaps = {
-
 
                 mode = { "n", "v" },
                 { "<leader>c", group = "lsp" },
@@ -23,8 +21,13 @@ return {
                 { "[", group = "prev" },
                 { "<leader><tab>", group = "tabs" },
                 { "<leader>s", group = "messages" },
-                { "<leader>b", group = "buffers", expand = function()
-                return require("which-key.extras").expand.buf() end},
+                {
+                    "<leader>b",
+                    group = "buffers",
+                    expand = function()
+                        return require("which-key.extras").expand.buf()
+                    end,
+                },
                 { "<leader>f", group = "file/find" },
                 { "<leader>F", group = "file/find(current word)" },
                 { "<leader>g", group = "surround" },
@@ -34,7 +37,6 @@ return {
                 { "<leader>q", group = "quit/session" },
                 { "<leader>u", group = "ui" },
                 { "<leader>uw", group = "windows" },
-
             }
 
             if Myutil.has("noice.nvim") then
@@ -46,7 +48,6 @@ return {
             end
 
             wk.add(keymaps)
-
-        end
-    }
+        end,
+    },
 }

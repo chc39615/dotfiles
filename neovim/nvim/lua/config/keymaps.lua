@@ -84,8 +84,8 @@ map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
 if not Myutil.has("trouble.nvim") then
-	map("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
-	map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
+    map("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
+    map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
 end
 
 -- toggle options
@@ -142,4 +142,3 @@ map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-

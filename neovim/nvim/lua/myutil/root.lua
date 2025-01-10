@@ -4,7 +4,6 @@ local M = setmetatable({}, {
     end,
 })
 
-
 ---@alias LazyRootFn fun(buf: number): (string|string[])
 ---@alias LazyRootSpec string|string[]|LazyRootFn
 
@@ -12,14 +11,11 @@ local M = setmetatable({}, {
 ---@field paths string[]
 ---@field spec LazyRootSpec
 
-
 ---@type LazyRootSpec[]
 M.spec = { "lsp", { ".git", "lua" }, "cwd" }
 
-
 --@type table<number, string>
 M.cache = {}
-
 
 M.detectors = {}
 
@@ -53,7 +49,6 @@ function M.detectors.pattern(buf, patterns)
     return pattern and { vim.fs.dirname(pattern) } or {}
 end
 
-
 ---@param spec LazyRootSpec
 ---@return LazyRootFn
 function M.resolve(spec)
@@ -82,7 +77,7 @@ function M.detect(opts)
         for _, p in ipairs(paths) do
             local pp = M.realpath(p)
             if pp and not vim.tbl_contains(roots, pp) then
-                roots[#roots +1] = pp
+                roots[#roots + 1] = pp
             end
         end
         table.sort(roots, function(a, b)
@@ -97,7 +92,6 @@ function M.detect(opts)
     end
     return ret
 end
-
 
 ---@param opts? {normalize?: boolean, buf?: numder}
 ---@return string

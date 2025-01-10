@@ -1,13 +1,13 @@
 return {
     {
-	    "folke/tokyonight.nvim",
+        "folke/tokyonight.nvim",
         lazy = true,
         opts = {
             transparent = true,
             styles = {
-                sidebars = "transparent", 
+                sidebars = "transparent",
                 floats = "transparent",
-            }
+            },
         },
         init = function()
             require("tokyonight").setup({
@@ -15,6 +15,6 @@ return {
             })
             vim.cmd.colorscheme("tokyonight")
             vim.cmd([[highlight WinSeparator guifg=orange]])
-        end
-    }
+        end,
+    },
 }

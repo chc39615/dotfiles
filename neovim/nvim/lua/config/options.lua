@@ -64,7 +64,7 @@ opt.listchars = { eol = "↵", tab = "<->", extends = "»", precedes = "«", spa
 
 -- autocomplete
 opt.completeopt = "menu,menuone,noselect"
-opt.conceallevel = 3           -- Hide * markup for bold and italic
+opt.conceallevel = 3 -- Hide * markup for bold and italic
 opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
@@ -89,4 +89,3 @@ vim.g.markdown_recommended_style = 0
 
 vim.opt.path:append({ "**" }) -- Finding files - Search down into subfolders
 vim.opt.wildignore:append({ "*/node_modules/*" })
-
