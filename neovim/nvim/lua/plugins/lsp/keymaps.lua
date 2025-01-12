@@ -65,16 +65,7 @@ function M.resolve(buffer)
     local spec = M.get()
     local clients = Myutil.lsp.get_clients({ bufnr = buffer })
     for _, client in ipairs(clients) do
-        local function get_server_config(server_name)
-            local success, config = pcall(require, "plugins.lsp.servers." .. server_name)
-            if not success then
-                return {}  -- Return empty table if the server config doesn't exist
-            end
-            return config
-        end
-
-        local server_config = get_server_config(client.name)
-
+        local server_config = Myutil.lsp.get_server_config(client.name)
         local maps = server_config.keys or {}
         vim.list_extend(spec, maps)
     end
