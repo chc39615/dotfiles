@@ -176,65 +176,6 @@ return {
 					return vim.ui.select(...)
 				end
 			end)
-
-			vim.api.nvim_create_autocmd("VimEnter", {
-				group = vim.api.nvim_create_augroup("start_directory", { clear = true }),
-				desc = "Open a folder",
-				once = true,
-				callback = function()
-					local stats = vim.uv.fs_stat(vim.fn.argv(0))
-					if stats and stats.type == "directory" then
-						-- State to track current explorer
-						local current_explorer = "fzf-lua"
-
-						-- Function to toggle between fzf-lua and neotree
-						local function toggle_explorer()
-							if current_explorer == "fzf-lua" then
-								-- Close fzf-lua by simulating an <Esc> keypress
-								vim.api.nvim_feedkeys(
-									vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
-									"n",
-									false
-								)
-								vim.schedule(function()
-									vim.cmd("Neotree show") -- Show Neotree
-									current_explorer = "neotree"
-								end)
-							else
-								-- Close neotree and open fzf-lua
-								vim.cmd("Neotree close")
-								vim.schedule(function()
-									require("fzf-lua").files()
-									current_explorer = "fzf-lua"
-								end)
-							end
-						end
-
-						-- Set keymap to toggle using "~"
-						vim.keymap.set(
-							"n",
-							"~",
-							toggle_explorer,
-							{ desc = "Toggle between fzf-lua and neotree", silent = true }
-						)
-
-						-- Open fzf-lua initially
-						require("fzf-lua").files()
-					end
-				end,
-			})
-
-			-- vim.api.nvim_create_autocmd("VimEnter", {
-			-- 	group = vim.api.nvim_create_augroup("start_directory", { clear = true }),
-			-- 	desc = "Open a folder",
-			-- 	once = true,
-			-- 	callback = function()
-			-- 		local stats = vim.uv.fs_stat(vim.fn.argv(0))
-			-- 		if stats and stats.type == "directory" then
-			-- 			require("fzf-lua").files()
-			-- 		end
-			-- 	end,
-			-- })
 		end,
 
 		keys = {
@@ -248,19 +189,15 @@ return {
 			-- { "<leader>/", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
 			{ "<leader>/", "<cmd>FzfLua live_grep<cr>", desc = "Grep (Root Dir)" },
 			{ "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
-			-- { "<leader><space>", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-			{ "<leader><space>", "<cmd>FzfLua files", desc = "Find Files (Root Dir)" },
 			-- find
 			{ "<leader>fb", "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
-			-- { "<leader>fc", LazyVim.pick.config_files(), desc = "Find Config File" },
-			{ "<leader>fc", "<cmd>FzfLua files cwd=~/.config<cr>", desc = "Find Config File" },
 			-- { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
 			{ "<leader>ff", "<cmd>FzfLua files<cr>", desc = "Find Files (Root Dir)" },
 			-- { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
 			{
 				"<leader>fF",
 				function()
-					require("fzf-lua").files({ root = false })
+					require("fzf-lua").files({ cwd = Myutil.root() })
 				end,
 				desc = "Find Files (cwd)",
 			},
