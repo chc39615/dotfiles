@@ -10,7 +10,15 @@ local defaults = {
 		autocmds = true,
 		keymaps = true,
 	},
-	icons = {},
+	icons = {
+        dap = {
+            Stopped             = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+            Breakpoint          = " ",
+            BreakpointCondition = " ",
+            BreakpointRejected  = { " ", "DiagnosticError" },
+            LogPoint            = ".>",
+        },
+    },
 	kind_filter = {
 		default = {
 			"Class",
@@ -121,5 +129,14 @@ function M.init()
 	-- The lazy file will apply syntax earlier
 	Myutil.lazyfile.setup()
 end
+
+setmetatable(M, {
+    __index = function(_, key)
+        if options == nil then
+            return vim.deepcopy(defaults)[key]
+        end
+        return options[key]
+    end
+})
 
 return M

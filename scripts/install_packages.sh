@@ -25,3 +25,6 @@ install_package zoxide
 
 # Fzf
 install_package fzf
+
+# yazi
+install_package yazi
