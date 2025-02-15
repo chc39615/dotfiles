@@ -1,14 +1,18 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+unsetopt beep
+bindkey -v
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/cody/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
 #
-# ~/.bashrc
 #
-
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-PS1='[\u@\h \W]\$ '
-
 # my alias
 # --- navigate ---
 alias ..="cd .."
@@ -32,12 +36,16 @@ alias nowd='date +"%Y-%m-%d"'
 alias df='df -h'
 alias dusage='du -sh * 2>/dev/null'
 
+
 # initial tools 
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 
-eval "$(pyenv init - bash)"
-eval "$(starship init bash)"
-eval "$(zoxide init bash)"
-eval "$(fzf --bash)"
+eval "$(pyenv init - zsh)"
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+eval "$(fzf --zsh)"
 
+# zplug
+source ~/.zplug/init.zsh
+zplug load

@@ -28,3 +28,6 @@ install_package fzf
 
 # yazi
 install_package yazi
+
+# eza
+install_package eza
