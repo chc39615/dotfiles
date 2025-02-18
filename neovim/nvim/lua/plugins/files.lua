@@ -58,7 +58,10 @@ return {
 							require("neo-tree")
 
 							vim.defer_fn(function()
-								require("fzf-lua").files({ cwd = vim.fn.argv(0) })
+								-- open fzf-lua if the plugin installed
+								if Myutil.has("fzf-lua") then
+									require("fzf-lua").git_files({ cwd = vim.fn.argv(0) })
+								end
 
 								-- Close the initial empty buffer
 								for _, buf in ipairs(vim.api.nvim_list_bufs()) do
