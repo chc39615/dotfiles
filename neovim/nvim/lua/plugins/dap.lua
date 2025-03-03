@@ -113,7 +113,41 @@ return {
 
 			-- You can provide additional configuration to the handlers,
 			-- see mason-nvim-dap README for more information
-			handlers = {},
+			handlers = {
+				function(config)
+					-- Apply default setup for all DAPs unless overridden
+					require("mason-nvim-dap").default_setup(config)
+				end,
+				python = function(config)
+					-- Add a custom configuration with justMyCode = false
+					config.configurations = {
+						{
+							type = "python",
+							request = "launch",
+							name = "Launch file (My Code Only)",
+							program = "${file}",
+							justMyCode = true,
+							pythonPath = function()
+								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. "/bin/python")
+									or "python3"
+							end,
+						},
+						{
+							type = "python",
+							request = "launch",
+							name = "Launch file (All Code)",
+							program = "${file}",
+							justMyCode = false,
+							pythonPath = function()
+								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. "/bin/python")
+									or "python3"
+							end,
+						},
+					}
+
+					require("mason-nvim-dap").default_setup(config)
+				end,
+			},
 
 			-- You'll need to check that you have the required things installed
 			-- online, please don't ask me how to install them :)
