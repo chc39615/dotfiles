@@ -65,6 +65,51 @@ function M.format(opts)
 	end
 end
 
+---@param from string
+---@param to string
+---@param rename? fun()
+function M.on_rename(from, to, rename)
+	local changes = { files = { {
+		oldUri = vim.uri_from_fname(from),
+		newUri = vim.uri_from_fname(to),
+	} } }
+
+	local clients = M.get_clients()
+	for _, client in ipairs(clients) do
+		if client.supports_method("workspace/willRenameFiles") then
+			print("support workspace/willRenameFiles")
+			local resp = client.request_sync("workspace/willRenameFiles", changes, 1000, 0)
+			if resp and resp.result ~= nil then
+				vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+			end
+		elseif client.supports_method("workspace/fileOperations/willRename") then
+			print("support workspace/fileOperations/willRename")
+			local resp = client.request_sync("workspace/fileOperations/willRename", changes, 1000, 0)
+			if resp and resp.result ~= nil then
+				vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
+			end
+		else
+			print("not support willRename")
+		end
+	end
+
+	if rename then
+		rename()
+	end
+
+	for _, client in ipairs(clients) do
+		if client.supports_method("workspace/didRenameFiles") then
+			print("support workspace/didRenameFiles")
+			client.notify("workspace/didRenameFiles", changes)
+		elseif client.support_method("workspace/fileOperations/didRename") then
+			print("support workspace/fileOperations/didRename")
+			client.notify("workspace/fileOperations/didRename")
+		else
+			print("not support didRename")
+		end
+	end
+end
+
 function M.get_server_config(server_name)
 	local success, config = pcall(require, "plugins.lsp.servers." .. server_name)
 	if not success then
