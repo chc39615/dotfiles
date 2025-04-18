@@ -12,17 +12,17 @@ return {
 				function()
 					require("neo-tree.command").execute({ toggle = true, dir = Myutil.root() })
 				end,
-				desc = "Explorer NeoTree (Root Dir)",
+				desc = "Explorer NeoTree (cwd)",
 			},
 			{
 				"<leader>fE",
 				function()
 					require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
 				end,
-				desc = "Explorer NeoTree (cwd)",
+				desc = "Explorer NeoTree (Root Dir)",
 			},
-			{ "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root Dir)", remap = true },
-			{ "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+			{ "<leader>e", "<leader>fe", desc = "Explorer NeoTree (cwd)", remap = true },
+			{ "<leader>E", "<leader>fE", desc = "Explorer NeoTree (Root Dir)", remap = true },
 			{
 				"<leader>ge",
 				function()
@@ -64,14 +64,15 @@ return {
 								end
 
 								-- Close the initial empty buffer
-								for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-									if
-										vim.fn.bufname(buf) == ""
-										and vim.api.nvim_get_option_value("buftype", { buf = buf }) == ""
-									then
-										vim.api.nvim_buf_delete(buf, { force = true })
-									end
-								end
+								-- hijack_netrw_behavior: "open_current" to comment this
+								-- for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+								-- 	if
+								-- 		vim.fn.bufname(buf) == ""
+								-- 		and vim.api.nvim_get_option_value("buftype", { buf = buf }) == ""
+								-- 	then
+								-- 		vim.api.nvim_buf_delete(buf, { force = true })
+								-- 	end
+								-- end
 
 								-- enable close_if_last_window
 								vim.api.nvim_create_autocmd("BufReadPost", {
@@ -119,6 +120,7 @@ return {
 				bind_to_cwd = false,
 				follow_current_file = { enabled = true },
 				use_libuv_file_watcher = true,
+				hijack_netrw_behavior = "open_current",
 				window = {
 					position = "left",
 					mappings = {
@@ -158,8 +160,8 @@ return {
 						["P"] = { "toggle_preview", config = { use_float = false } },
 						["F"] = "clear_filter",
 						-- ["/"] = "none",
-						["s"] = "open_split",
-						["v"] = "open_vsplit",
+						["<c-s>"] = "open_split",
+						["<c-v>"] = "open_vsplit",
 						["<c-f>"] = "none",
 						["<c-b>"] = "none",
 						["<esc>"] = "none",
