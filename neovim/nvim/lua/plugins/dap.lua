@@ -36,7 +36,6 @@ return {
       { "<F5>", function() require("dap").continue() end, desc = "Run/Continue" },
       { "<s-F5>", function() require("dap").terminate() end, desc = "Terminate" },
       { "<sc-F5>", function() require("dap").restart() end, desc = "Restart" },
-      -- { "\27[15;6~", function() require("dap").restart() end, desc = "Restart" },
       -- set breakpoints
       { "<s-F9>", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
       { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
@@ -45,15 +44,17 @@ return {
       { "<F11>", function() require("dap").step_into() end, desc = "Step Into" },
       { "<s-F11>", function() require("dap").step_out() end, desc = "Step Out" },
       -- { "<leader>da", function() require("dap").continue({ before = get_args }) end, desc = "Run with Args" },
-      -- { "<leader>dC", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
-      -- { "<leader>dg", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
-      -- { "<leader>dj", function() require("dap").down() end, desc = "Down" },
-      -- { "<leader>dk", function() require("dap").up() end, desc = "Up" },
+      { "<leader>dC", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
+      { "<leader>dg", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
+      { "<leader>dj", function() require("dap").down() end, desc = "Down" },
+      { "<leader>dk", function() require("dap").up() end, desc = "Up" },
       { "<leader>dl", function() require("dap").run_last() end, desc = "Run Last" },
-      { "<leader>dP", function() require("dap").pause() end, desc = "Pause" },
+      { "<leader>dp", function() require("dap").pause() end, desc = "Pause" },
       -- { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
       -- { "<leader>ds", function() require("dap").session() end, desc = "Session" },
       { "<leader>dw", function() require("dap.ui.widgets").hover() end, desc = "DAP Widgets" },
+      { "<leader>ds", ":DapEvalSelection<cr>", desc = "Send selection to DAP REPL", mode = { "n", "v"}},
+      { "<leader>de", ":DapEvalToggle<cr>", desc = "Toggle or create DAP eval buffer", mode = { "n", "v"}},
     },
 
 		config = function()
@@ -78,6 +79,11 @@ return {
 			vscode.json_decode = function(str)
 				return vim.json.decode(json.json_strip_comments(str))
 			end
+
+			-- My code for dap
+			require("myutil.dap")
+			-- vim.keymap.set({ "n", "v" }, "<leader>ds", ":DapEvalSelection<CR>", { desc = "Send selection to DAP REPL" })
+			-- vim.keymap.set( { "n", "v" }, "<leader>de", ":DapEvalToggle<CR>", { desc = "Toggle or create DAP eval buffer" })
 		end,
 	},
 	{
@@ -86,7 +92,7 @@ return {
         -- stylua: ignore
         keys = {
             { "<leader>du", function() require("dapui").toggle({ }) end, desc = "Dap UI" },
-            { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
+            -- { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
         },
 		opts = {
 			-- controls = { enabled = false },
