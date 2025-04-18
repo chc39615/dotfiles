@@ -187,12 +187,12 @@ return {
 				desc = "Switch Buffer",
 			},
 			-- { "<leader>/", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
-			{ "<leader>/", "<cmd>FzfLua live_grep<cr>", desc = "Grep (Root Dir)" },
+			-- { "<leader>/", "<cmd>FzfLua live_grep<cr>", desc = "Grep (Root Dir)" },
 			{ "<leader>:", "<cmd>FzfLua command_history<cr>", desc = "Command History" },
 			-- find
 			{ "<leader>fb", "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
 			-- { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-			{ "<leader>ff", "<cmd>FzfLua files<cr>", desc = "Find Files (Root Dir)" },
+			{ "<leader>fg", "<cmd>FzfLua files<cr>", desc = "Find Files (git-files)" },
 			-- { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
 			{
 				"<leader>fF",
@@ -201,7 +201,7 @@ return {
 				end,
 				desc = "Find Files (cwd)",
 			},
-			{ "<leader>fg", "<cmd>FzfLua git_files<cr>", desc = "Find Files (git-files)" },
+			{ "<leader>ff", "<cmd>FzfLua git_files<cr>", desc = "Find Files" },
 			{ "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
 			-- { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
 			{
