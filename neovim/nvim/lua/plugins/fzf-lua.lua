@@ -179,8 +179,8 @@ return {
 		end,
 
 		keys = {
-			{ "<c-j>", "<c-j>", ft = "fzf", mode = "t", nowait = true },
-			{ "<c-k>", "<c-k>", ft = "fzf", mode = "t", nowait = true },
+			-- { "<c-j>", "<c-j>", ft = "fzf", mode = "t", nowait = true },
+			-- { "<c-k>", "<c-k>", ft = "fzf", mode = "t", nowait = true },
 			{
 				"<leader>,",
 				"<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>",
@@ -192,22 +192,23 @@ return {
 			-- find
 			{ "<leader>fb", "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
 			-- { "<leader>ff", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
-			{ "<leader>fg", "<cmd>FzfLua files<cr>", desc = "Find Files (git-files)" },
+			{ "<leader>fg", "<cmd>FzfLua files<cr>", desc = "Find Files" },
 			-- { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
 			{
 				"<leader>fF",
 				function()
-					require("fzf-lua").files({ cwd = Myutil.root() })
+					require("fzf-lua").files({ cwd = Myutil.root.buffolder() })
 				end,
 				desc = "Find Files (cwd)",
 			},
-			{ "<leader>ff", "<cmd>FzfLua git_files<cr>", desc = "Find Files" },
+			{ "<leader>ff", "<cmd>FzfLua git_files<cr>", desc = "Find Files (git-files)" },
 			{ "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
 			-- { "<leader>fR", LazyVim.pick("oldfiles", { cwd = vim.uv.cwd() }), desc = "Recent (cwd)" },
 			{
 				"<leader>fR",
 				function()
-					require("fzf-lua").oldfiles({ cwd = vim.uv.cwd() })
+					-- require("fzf-lua").oldfiles({ cwd = vim.uv.cwd() })
+					require("fzf-lua").oldfiles({ cwd = Myutil.root.buffolder })
 				end,
 				desc = "Recent (cwd)",
 			},

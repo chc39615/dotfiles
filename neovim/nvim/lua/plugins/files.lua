@@ -12,17 +12,18 @@ return {
 				function()
 					require("neo-tree.command").execute({ toggle = true, dir = Myutil.root() })
 				end,
-				desc = "Explorer NeoTree (cwd)",
+				desc = "Explorer NeoTree (Root dir)",
 			},
 			{
 				"<leader>fE",
 				function()
-					require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+					-- require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+					require("neo-tree.command").execute({ toggle = true, dir = Myutil.root.buffolder() })
 				end,
-				desc = "Explorer NeoTree (Root Dir)",
+				desc = "Explorer NeoTree (cwd)",
 			},
-			{ "<leader>e", "<leader>fe", desc = "Explorer NeoTree (cwd)", remap = true },
-			{ "<leader>E", "<leader>fE", desc = "Explorer NeoTree (Root Dir)", remap = true },
+			{ "<leader>e", "<leader>fe", desc = "Explorer NeoTree (Root dir)", remap = true },
+			{ "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
 			{
 				"<leader>ge",
 				function()
