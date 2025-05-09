@@ -36,6 +36,10 @@ return {
 				"vim",
 				"vimdoc",
 				"yaml",
+				"javascript",
+				"typescript",
+				"vue",
+				"css",
 			},
 			incremental_selection = {
 				enable = true,

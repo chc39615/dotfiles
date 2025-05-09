@@ -305,6 +305,8 @@ return {
 			},
 		},
 		-- mason-nvim-dap is loaded when nvim-dap loads
+		-- mason-nvim-dap will startup in handler and config, we don't want it start twice.
+		-- So put empty function here.
 		config = function() end,
 	},
 }

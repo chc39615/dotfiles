@@ -208,7 +208,7 @@ return {
 				"<leader>fR",
 				function()
 					-- require("fzf-lua").oldfiles({ cwd = vim.uv.cwd() })
-					require("fzf-lua").oldfiles({ cwd = Myutil.root.buffolder })
+					require("fzf-lua").oldfiles({ cwd = Myutil.root.buffolder() })
 				end,
 				desc = "Recent (cwd)",
 			},
@@ -228,7 +228,8 @@ return {
 			{
 				"<leader>sG",
 				function()
-					require("fzf-lua").live_grep({ root = false })
+					require("fzf-lua").live_grep({ cwd = Myutil.root.buffolder() })
+					-- require("fzf-lua").live_grep({ root = false })
 				end,
 				desc = "Grep (cwd)",
 			},

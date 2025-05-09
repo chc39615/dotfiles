@@ -132,7 +132,7 @@ end
 ---@param opts? {normalize?: boolean, buf?: numder}
 ---@return string
 function M.get(opts)
-	print("exec Myutil.root()")
+	-- print("exec Myutil.root()")
 	opts = opts or {}
 	local buf = opts.buf or vim.api.nvim_get_current_buf()
 	local ret = M.cache[buf]

@@ -31,9 +31,9 @@ return {
 				update_n_lines = "gsn",
 			},
 		},
-		config = function(_, opts)
-			require("mini.surround").setup(opts)
-		end,
+		-- config = function(_, opts)
+		-- 	require("mini.surround").setup(opts)
+		-- end,
 	},
 	{
 		"echasnovski/mini.pairs",
@@ -64,8 +64,8 @@ return {
 				desc = "Toggle Auto Pairs",
 			},
 		},
-		config = function(_, opts)
-			require("mini.pairs").setup(opts)
-		end,
+		-- config = function(_, opts)
+		-- 	require("mini.pairs").setup(opts)
+		-- end,
 	},
 }

@@ -1,3 +1,27 @@
+local function check_activate()
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
+		if ft == "neo-tree" then
+			vim.cmd("Neotree close")
+			return true
+		end
+	end
+	return false
+end
+
+-- 先用一陣子, 看看有沒有需要把整個 git_files 換成 files
+local function is_git_repo()
+	-- Run a git command to check if the current directory is a git repository
+	local handle = io.popen("git rev-parse --is-inside-work-tree 2>/dev/null")
+	if handle == nil then
+		return false -- Return false if popen fails (e.g., git not installed)
+	end
+	local result = handle:read("*a")
+	handle:close()
+	return result:match("true") ~= nil
+end
+
 return {
 	{
 		"nvim-neo-tree/neo-tree.nvim",
@@ -10,15 +34,27 @@ return {
 			{
 				"<leader>fe",
 				function()
-					require("neo-tree.command").execute({ toggle = true, dir = Myutil.root() })
+					-- Check if any Neo-tree window is open
+					if check_activate() then
+						vim.cmd("Neotree close")
+					else
+						-- If not open, open the filesystem view (or your preferred default)
+						require("neo-tree.command").execute({ toggle = true, dir = Myutil.root() })
+					end
 				end,
 				desc = "Explorer NeoTree (Root dir)",
 			},
 			{
 				"<leader>fE",
 				function()
-					-- require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
-					require("neo-tree.command").execute({ toggle = true, dir = Myutil.root.buffolder() })
+					-- Check if any Neo-tree window is open
+					if check_activate() then
+						vim.cmd("Neotree close")
+					else
+						-- If not open, open the filesystem view (or your preferred default)
+						-- require("neo-tree.command").execute({ toggle = true, dir = vim.uv.cwd() })
+						require("neo-tree.command").execute({ toggle = true, dir = Myutil.root.buffolder() })
+					end
 				end,
 				desc = "Explorer NeoTree (cwd)",
 			},
@@ -56,17 +92,26 @@ return {
 					else
 						local stats = vim.uv.fs_stat(vim.fn.argv(0))
 						if stats and stats.type == "directory" then
+							-- open neo-tree
 							require("neo-tree")
 
 							vim.defer_fn(function()
 								-- open fzf-lua if the plugin installed
 								if Myutil.has("fzf-lua") then
-									require("fzf-lua").git_files({ cwd = vim.fn.argv(0) })
+									if is_git_repo() then
+										require("fzf-lua").git_files({ cwd = vim.fn.argv(0) })
+									else
+										require("fzf-lua").files({ cwd = vim.fn.argv(0) })
+									end
 								end
 
 								-- Close the initial empty buffer
-								-- hijack_netrw_behavior: "open_current" to comment this
+								-- hijack_netrw_behavior: "open_default" will open a empty buffer,
+								-- use this autocmd to close it.
+								-- hijack_netrw_behavior: "open_current" doesn't have empty buffer,
+								-- can comment out this autocmd
 								-- for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+								-- 	print("bufnr: " .. buf)
 								-- 	if
 								-- 		vim.fn.bufname(buf) == ""
 								-- 		and vim.api.nvim_get_option_value("buftype", { buf = buf }) == ""
@@ -76,12 +121,13 @@ return {
 								-- end
 
 								-- enable close_if_last_window
-								vim.api.nvim_create_autocmd("BufReadPost", {
-									once = true, -- only execute this once
-									callback = function()
-										require("neo-tree").config.close_if_last_window = true
-									end,
-								})
+								-- 不知道有什麼用, 暫時comment out
+								-- vim.api.nvim_create_autocmd("BufReadPost", {
+								-- 	once = true, -- only execute this once
+								-- 	callback = function()
+								-- 		require("neo-tree").config.close_if_last_window = true
+								-- 	end,
+								-- })
 							end, 30)
 						end
 					end
@@ -122,6 +168,8 @@ return {
 				follow_current_file = { enabled = true },
 				use_libuv_file_watcher = true,
 				hijack_netrw_behavior = "open_current",
+				-- open_current: use current buffer to open neo-tree
+				-- open_default: use a new buffer(side) to open neo-tree
 				window = {
 					position = "left",
 					mappings = {

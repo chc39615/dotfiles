@@ -99,6 +99,8 @@ return {
 			},
 			ensure_installed = {
 				"lua-language-server",
+				"typescript-language-server",
+				"vue-language-server",
 			},
 		},
 		---@param opts MasonSettings | {ensure_installed: string[]}
