@@ -1,5 +1,11 @@
-# zplug mac
-export ZPLUG_HOME=/opt/homebrew/opt/zplug
+if [[ "$(uname)" == "Darwin" ]]; then
+    # zplug mac
+  export ZPLUG_HOME=/opt/homebrew/opt/zplug
+else
+  export ZPLUG_HOME=$HOME/.zplug
+fi
+
+
 source $ZPLUG_HOME/init.zsh
 
 zplug "zsh-users/zsh-autosuggestions", use:"*.zsh", defer:3
