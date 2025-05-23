@@ -40,15 +40,15 @@ map("v", "<A-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 
 -- buffers
 if Myutil.has("bufferline.nvim") then
-    -- map("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
-    -- map("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
-    map("n", "[b", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
-    map("n", "]b", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
+	-- map("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
+	-- map("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
+	map("n", "[b", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
+	map("n", "]b", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
 else
-    -- map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-    -- map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-    map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-    map("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
+	-- map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+	-- map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+	map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+	map("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
 end
 map("n", "<leader>bb", "<cmd>b#<cr>", { desc = "Switch to Other Buffer" })
 
@@ -58,10 +58,10 @@ map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsea
 -- Clear search, diff update and redraw
 -- take from runtime/lua/_editor.lua
 map(
-    "n",
-    "<leader>ur",
-    "<cmd>nohlsearch<bar>diffupdate<bar>normal! <C-L><cr>",
-    { desc = "redraw /clear helsearch / diff update" }
+	"n",
+	"<leader>ur",
+	"<cmd>nohlsearch<bar>diffupdate<bar>normal! <C-L><cr>",
+	{ desc = "redraw /clear helsearch / diff update" }
 )
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
@@ -84,25 +84,25 @@ map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
 if not Myutil.has("trouble.nvim") then
-    map("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
-    map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
+	map("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
+	map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
 end
 
 -- toggle options
 -- map("n", "<leader>uf", require("lsp.format").toggle, { desc = "Toggle format on Save" })
 map("n", "<leader>us", function()
-    Myutil.toggle("spell")
+	Myutil.toggle("spell")
 end, { desc = "Toggle Spelling" })
 map("n", "<leader>uw", function()
-    Myutil.toggle("wrap")
+	Myutil.toggle("wrap")
 end, { desc = "Toggle Word Wrap" })
 map("n", "<leader>ul", function()
-    Myutil.toggle("list")
+	Myutil.toggle("list")
 end, { desc = "Toggle list" })
 map("n", "<leader>ud", Myutil.toggle.diagnostics, { desc = "Toggle Diagnostics" })
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map("n", "<leader>uc", function()
-    Myutil.toggle("conceallevel", false, { 0, conceallevel })
+	Myutil.toggle("conceallevel", false, { 0, conceallevel })
 end, { desc = "Toggle Conceal" })
 
 -- highlights under cursor
@@ -129,13 +129,22 @@ map("v", "y", "y`]", { desc = "better yank" })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-    local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-    severity = severity and vim.diagnostic.severity[severity] or nil
-    return function()
-        go({ severity = severity })
-    end
+	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	severity = severity and vim.diagnostic.severity[severity] or nil
+	return function()
+		go({ severity = severity })
+	end
 end
-map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+
+local function open_diagnostic_and_focus()
+	local _, winid = vim.diagnostic.open_float()
+	-- print("winid: " .. winid)
+	if winid and vim.api.nvim_win_is_valid(winid) then
+		vim.api.nvim_set_current_win(winid)
+	end
+end
+-- map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+map("n", "<leader>cd", open_diagnostic_and_focus, { desc = "Line Diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
