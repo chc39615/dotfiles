@@ -13,5 +13,3 @@ source ~/.zsh/plugins/startship.zsh
 source ~/.zsh/plugins/fzf.zsh
 source ~/.zsh/plugins/eza.zsh
 
-
-
