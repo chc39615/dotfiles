@@ -23,12 +23,14 @@ config.inactive_pane_hsb = {
 }
 
 config.font = wezterm.font_with_fallback({
-	"Oxygen Mono",
 	"JetBrainsMono Nerd Font Mono",
 	"FiraCode Nerd Font",
 })
+config.font_size = 16
 
-config.default_prog = { "powershell.exe", "-NoLogo" }
+config.native_macos_fullscreen_mode = true
+
+-- config.default_prog = { "powershell.exe", "-NoLogo" }
 
 config.window_padding = {
 	left = 3,
@@ -231,30 +233,30 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover, max_width)
 	}
 end)
 
-local launch_menu = {}
-if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-	table.insert(launch_menu, {
-		label = "PowerShell",
-		args = { "powershell.exe", "-NoLogo" },
-	})
-
-	table.insert(launch_menu, {
-		label = "CMD",
-		args = { "cmd.exe" },
-	})
-
-	table.insert(launch_menu, {
-		label = "WSL",
-		args = { "wsl.exe" },
-	})
-
-	table.insert(launch_menu, {
-		label = "ArchLinux",
-		args = { "cmd.exe", "/c", "C:\\Users\\cody_zhang\\conn_arch.bat" },
-	})
-end
-
-config.launch_menu = launch_menu
+-- local launch_menu = {}
+-- if wezterm.target_triple == "x86_64-pc-windows-msvc" then
+-- 	table.insert(launch_menu, {
+-- 		label = "PowerShell",
+-- 		args = { "powershell.exe", "-NoLogo" },
+-- 	})
+--
+-- 	table.insert(launch_menu, {
+-- 		label = "CMD",
+-- 		args = { "cmd.exe" },
+-- 	})
+--
+-- 	table.insert(launch_menu, {
+-- 		label = "WSL",
+-- 		args = { "wsl.exe" },
+-- 	})
+--
+-- 	table.insert(launch_menu, {
+-- 		label = "ArchLinux",
+-- 		args = { "cmd.exe", "/c", "C:\\Users\\cody_zhang\\conn_arch.bat" },
+-- 	})
+-- end
+--
+-- config.launch_menu = launch_menu
 -- local mux = wezterm.mux
 -- wezterm.on("gui-startup", function(spawnCmd)
 -- 	if spawnCmd then
@@ -320,10 +322,12 @@ config.keys = {
 	{ key = "|", mods = "LEADER|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "-", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
 	{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
-	{ key = "LeftArrow", mods = "ALT", action = act.ActivatePaneDirection("Left") },
-	{ key = "RightArrow", mods = "ALT", action = act.ActivatePaneDirection("Right") },
-	{ key = "UpArrow", mods = "ALT", action = act.ActivatePaneDirection("Up") },
-	{ key = "DownArrow", mods = "ALT", action = act.ActivatePaneDirection("Down") },
+
+	{ key = "LeftArrow", mods = "ALT|CTRL", action = act.ActivatePaneDirection("Left") },
+	{ key = "RightArrow", mods = "ALT|CTRL", action = act.ActivatePaneDirection("Right") },
+	{ key = "UpArrow", mods = "ALT|CTRL", action = act.ActivatePaneDirection("Up") },
+	{ key = "DownArrow", mods = "ALT|CTRL", action = act.ActivatePaneDirection("Down") },
+
 	{ key = "z", mods = "ALT", action = act.ShowLauncher },
 	{ key = "L", mods = "CTRL", action = act.ShowDebugOverlay },
 
@@ -373,6 +377,28 @@ config.mouse_bindings = {
 			end
 		end),
 	},
+
+
+    -- Scrolling up while holding CTRL increases the font size
+    {
+        event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+        mods = 'CTRL',
+        action = act.IncreaseFontSize,
+    },
+
+    -- Scrolling down while holding CTRL decreases the font size
+    {
+        event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+        mods = 'CTRL',
+        action = act.DecreaseFontSize,
+    },
+
+    -- reset font size
+    {
+        event = { Down = { streak = 1, button = 'Middle' } },
+        mods = 'CTRL',
+        action = act.ResetFontSize,
+    },
 }
 
 -- and finally, return the configuration to wezterm
