@@ -47,6 +47,14 @@ return {
 				end
 			end
 
+			local function reset_dapui_if_needed()
+				local dap_ok, dap = pcall(require, "dap")
+				local dapui_ok, dapui = pcall(require, "dapui")
+				if dap_ok and dapui_ok and dap.session() then
+					dapui.open({ reset = true })
+				end
+			end
+
 			local horizontal = Terminal:new({
 				direction = "horizontal",
 				size = 20,
@@ -62,17 +70,22 @@ return {
 					buf_keymap(term.bufnr, "t", "<C-Bslash>", "<cmd>ToggleTerm<cr>", noremap)
 
 					if Myutil.has("nvim-dap") and Myutil.has("nvim-dap-ui") then
+						-- for terminal close
+						vim.api.nvim_create_autocmd("TermClose", {
+							buffer = term.bufnr,
+							callback = function()
+								vim.defer_fn(function()
+									reset_dapui_if_needed()
+								end, 100) -- delay 100ms (can adjust as needed)
+							end,
+						})
+						-- for terminal hide
 						vim.api.nvim_create_autocmd("WinClosed", {
 							buffer = term.bufnr,
 							callback = function()
 								vim.schedule(function()
-									local filetype = vim.bo[term.bufnr].filetype
-									if filetype == "toggleterm" then
-										local dap, dapui = require("dap"), require("dapui")
-										if dap.session() then
-											-- print('dapui reset')
-											dapui.open({ reset = true })
-										end
+									if vim.api.nvim_buf_is_valid(term.bufnr) then
+										reset_dapui_if_needed()
 									end
 								end)
 							end,

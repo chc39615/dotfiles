@@ -93,7 +93,7 @@ end
 map("n", "<leader>us", function()
 	Myutil.toggle("spell")
 end, { desc = "Toggle Spelling" })
-map("n", "<leader>uw", function()
+map("n", "<leader>up", function()
 	Myutil.toggle("wrap")
 end, { desc = "Toggle Word Wrap" })
 map("n", "<leader>ul", function()
@@ -129,7 +129,8 @@ map("v", "y", "y`]", { desc = "better yank" })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-	local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	-- local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+	local go = next and vim.diagnostic.get_next or vim.diagnostic.get_prev
 	severity = severity and vim.diagnostic.severity[severity] or nil
 	return function()
 		go({ severity = severity })
