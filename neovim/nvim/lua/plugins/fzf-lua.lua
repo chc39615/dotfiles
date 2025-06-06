@@ -118,6 +118,7 @@ return {
 					col = 0.5,
 					preview = {
 						scrollchars = { "┃", "" },
+						layout = "vertical",
 					},
 				},
 				files = {
