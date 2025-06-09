@@ -123,6 +123,7 @@ return {
 				},
 				files = {
 					cwd_prompt = false,
+					formatter = "path.filename_first",
 					actions = {
 						["alt-i"] = { actions.toggle_ignore },
 						["alt-h"] = { actions.toggle_hidden },
@@ -135,6 +136,8 @@ return {
 					},
 				},
 				lsp = {
+					async_or_timeout = true,
+					jump_to_single_result = true,
 					symbols = {
 						symbol_hl = function(s)
 							return "TroubleIcon" .. s
