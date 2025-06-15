@@ -118,12 +118,10 @@ return {
 					col = 0.5,
 					preview = {
 						scrollchars = { "┃", "" },
-						layout = "vertical",
 					},
 				},
 				files = {
 					cwd_prompt = false,
-					formatter = "path.filename_first",
 					actions = {
 						["alt-i"] = { actions.toggle_ignore },
 						["alt-h"] = { actions.toggle_hidden },
@@ -136,8 +134,6 @@ return {
 					},
 				},
 				lsp = {
-					async_or_timeout = true,
-					jump_to_single_result = true,
 					symbols = {
 						symbol_hl = function(s)
 							return "TroubleIcon" .. s
@@ -269,24 +265,25 @@ return {
 			},
 			-- { "<leader>uC", LazyVim.pick("colorschemes"), desc = "Colorscheme with Preview" },
 			{ "<leader>uC", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme with Preview" },
-			{
-				"<leader>ss",
-				function()
-					require("fzf-lua").lsp_document_symbols({
-						regex_filter = symbols_filter,
-					})
-				end,
-				desc = "Goto Symbol",
-			},
-			{
-				"<leader>sS",
-				function()
-					require("fzf-lua").lsp_live_workspace_symbols({
-						regex_filter = symbols_filter,
-					})
-				end,
-				desc = "Goto Symbol (Workspace)",
-			},
+			{ "<leader>ss", "<cmd>FzfLua treesitter<cr>", desc = "Goto Symbol" },
+			-- {
+			-- 	"<leader>ss",
+			-- 	function()
+			-- 		require("fzf-lua").lsp_document_symbols({
+			-- 			regex_filter = symbols_filter,
+			-- 		})
+			-- 	end,
+			-- 	desc = "Goto Symbol",
+			-- },
+			-- {
+			-- 	"<leader>sS",
+			-- 	function()
+			-- 		require("fzf-lua").lsp_live_workspace_symbols({
+			-- 			regex_filter = symbols_filter,
+			-- 		})
+			-- 	end,
+			-- 	desc = "Goto Symbol (Workspace)",
+			-- },
 		},
 	},
 }
