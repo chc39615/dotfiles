@@ -15,8 +15,15 @@ bindkey -r '^[[1;5C'  # Ctrl+Right
 bindkey -r '^[[1;5A'  # Ctrl+Up
 bindkey -r '^[[1;5B'  # Ctrl+Down
 
-bindkey -r "^[[A" # up-line-or-history
-bindkey -r "^[[B" # down-line-or-history
+# autoload: tells Zsh to load a function from disk only when it's first used (lazy loading).
+# -U: disables alias expansion for the function (safer, avoids issues with overridden names).
+# -z: tells Zsh this is a Zsh function, not a shell script.
+# autoload -Uz up-line-or-history down-line-or-history
+# bindkey "^[[A" up-line-or-history # up-line-or-history
+# bindkey "^[[B" down-line-or-history # down-line-or-history
+
+# bindkey -r "^[[A" # up-line-or-history
+# bindkey -r "^[[B" # down-line-or-history
 # bindkey -r "^[[C" # vi-forward-char
 # bindkey -r "^[[D" # vi-backward-char
 
