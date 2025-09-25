@@ -125,6 +125,21 @@ return {
 					actions = {
 						["alt-i"] = { actions.toggle_ignore },
 						["alt-h"] = { actions.toggle_hidden },
+						["ctrl-g"] = function()
+							fzf.git_files()
+						end,
+					},
+				},
+				git = {
+					files = {
+						cwd_prompt = false,
+						actions = {
+							["alt-i"] = { actions.toggle_ignore },
+							["alt-h"] = { actions.toggle_hidden },
+							["ctrl-g"] = function()
+								fzf.files()
+							end,
+						},
 					},
 				},
 				grep = {
