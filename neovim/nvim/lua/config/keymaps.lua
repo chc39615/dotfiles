@@ -152,3 +152,80 @@ map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+
+-- quickfix list
+local function quickfix_is_open()
+	local quickfix_open = false
+	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		if vim.bo[buf].buftype == "quickfix" then
+			quickfix_open = true
+			break
+		end
+	end
+	return quickfix_open
+end
+map("n", "<leader>qo", function()
+	local quickfix_open = quickfix_is_open()
+	if not quickfix_open then
+		vim.cmd("copen")
+		-- Jump back to the original window
+		-- vim.cmd("wincmd p")
+	end
+end, { desc = "open quickfix", noremap = true, silent = true })
+map("n", "<leader>qc", function()
+	local quickfix_open = quickfix_is_open()
+	if quickfix_open then
+		vim.cmd("cclose")
+	end
+end, { desc = "close quickfix", noremap = true, silent = true })
+map("n", "<leader>qa", function()
+	-- check if current buffer is quickfix
+	if vim.bo.buftype == "quickfix" then
+		return
+	end
+	-- Send current line to quickfix
+	local line = vim.api.nvim_get_current_line()
+	local fname = vim.api.nvim_buf_get_name(0)
+	local lnum = vim.api.nvim_win_get_cursor(0)[1]
+	vim.fn.setqflist({ { filename = fname, lnum = lnum, text = line } }, "a")
+
+	local quickfix_open = quickfix_is_open()
+	if not quickfix_open then
+		-- Open quickfix window
+		vim.cmd("copen")
+		-- Jump back to the original window
+		vim.cmd("wincmd p")
+	end
+end, { desc = "add current line to quickfix", noremap = true, silent = true })
+map("n", "<leader>qs", function()
+	-- get the current quickfix list
+	local qf_list = vim.fn.getqflist()
+	if #qf_list == 0 then
+		Myutil.warn("Quickfix list is empty")
+		return
+	end
+
+	-- Sort by filename and line number as secondary key for same filenames
+	table.sort(qf_list, function(a, b)
+		local fname_a = vim.fn.bufname(a.bufnr) or ""
+		local fname_b = vim.fn.bufname(b.bufnr) or ""
+		if fname_a == fname_b then
+			return a.lnum < b.lnum
+		end
+		return fname_a < fname_b
+	end)
+	-- alternative: Sort by text (uncomment to use)
+	-- table.sort(qf_list, function(a, b)
+	--     return a.text < b.text
+	-- end)
+
+	-- Update the quickfix list
+	vim.fn.setqflist(qf_list, "r")
+
+	-- Refresh the quickfix window if open
+	if vim.fn.getqflist({ winid = 0 }).winid ~= 0 then
+		vim.cmd("copen")
+		vim.cmd("wincmd p") -- Return to previous window
+	end
+end, { desc = "sort quickfix", noremap = true, silent = true })
