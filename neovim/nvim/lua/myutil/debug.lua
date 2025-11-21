@@ -42,13 +42,44 @@ function M._dump(value, opts)
 end
 
 function M.dump(...)
-	local value = { ... }
-	if vim.tbl_isempty(value) then
+	local n = select("#", ...) -- Get the total number of arguments passed
+	local inspected_values = {}
+
+	-- Iterate from 1 up to the total count (n)
+	for i = 1, n do
+		local value = select(i, ...) -- Fetch the argument at the current index i
+
+		local display_value
+		if value == nil then
+			display_value = "<NIL_VALUE>" -- Custom string for nil
+		elseif type(value) == "string" and value == "" then
+			display_value = "<EMPTY_STRING>" -- Custom string for ""
+		else
+			display_value = value
+		end
+
+		table.insert(inspected_values, display_value)
+	end
+
+	-- Rest of your original logic for M.dump...
+	local value
+	if vim.tbl_isempty(inspected_values) then
 		value = nil
 	else
-		value = vim.islist(value) and vim.tbl_count(value) <= 1 and value[1] or value
+		value = vim.islist(inspected_values) and vim.tbl_count(inspected_values) <= 1 and inspected_values[1]
+			or inspected_values
 	end
 	M._dump(value)
 end
+
+-- function M.dump(...)
+-- 	local value = { ... }
+-- 	if vim.tbl_isempty(value) then
+-- 		value = nil
+-- 	else
+-- 		value = vim.islist(value) and vim.tbl_count(value) <= 1 and value[1] or value
+-- 	end
+-- 	M._dump(value)
+-- end
 
 return M

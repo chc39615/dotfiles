@@ -11,14 +11,14 @@ local defaults = {
 		keymaps = true,
 	},
 	icons = {
-        dap = {
-            Stopped             = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
-            Breakpoint          = " ",
-            BreakpointCondition = " ",
-            BreakpointRejected  = { " ", "DiagnosticError" },
-            LogPoint            = ".>",
-        },
-    },
+		dap = {
+			Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+			Breakpoint = " ",
+			BreakpointCondition = " ",
+			BreakpointRejected = { " ", "DiagnosticError" },
+			LogPoint = ".>",
+		},
+	},
 	kind_filter = {
 		default = {
 			"Class",
@@ -72,8 +72,31 @@ function M.load(name)
 	vim.api.nvim_exec_autocmds("User", { pattern = pattern, modeline = false })
 end
 
+local function set_g_clipboard()
+	local is_ssh = (os.getenv("SSH_CONNECTION") ~= nil or os.getenv("SSH_TTY") ~= nil)
+	local has_display = (os.getenv("DISPLAY") ~= nil)
+
+	if is_ssh and has_display and vim.fn.has("mac") then
+		vim.g.clipboard = {
+			name = "xclip",
+			copy = {
+				["+"] = "xclip -selection clipboard",
+				["*"] = "xclip -selection primary",
+			},
+			paste = {
+				["+"] = "xclip -selection clipboard -o",
+				["*"] = "xclip -selection primary -o",
+			},
+			cache_enabled = 1,
+		}
+	else
+		-- let system choose the clipboard provider
+		vim.g.clipboard = nil
+	end
+end
+
 local options
-local lazy_clipboard
+local Lazy_clipboard
 function M.setup(opts)
 	options = vim.tbl_deep_extend("force", defaults, opts or {}) or {}
 
@@ -88,15 +111,15 @@ function M.setup(opts)
 		group = group,
 		pattern = "VeryLazy",
 		callback = function()
+			-- reload the clipbaord setting
+			if Lazy_clipboard ~= nil then
+				vim.opt.clipboard = Lazy_clipboard
+			end
+
 			if lazy_autocmds then
 				M.load("autocmds")
 			end
 			M.load("keymaps")
-
-			-- reload the clipbaord setting
-			if lazy_clipboard ~= nil then
-				vim.opt.clipboard = lazy_clipboard
-			end
 
 			local format = require("myutil.format")
 			format.setup()
@@ -123,20 +146,25 @@ function M.init()
 	M.load("options")
 
 	-- defer built-in clipboard handling: "xsel" and "pbcopy" can be slow
-	lazy_clipboard = vim.opt.clipboard
+	-- the clipboard will load at config.setup()
+	-- 20251120 tested doesn't make significant different (with xclip)
+	Lazy_clipboard = vim.opt.clipboard
 	vim.opt.clipboard = ""
+
+	-- the global clipboard needs to be set early
+	set_g_clipboard()
 
 	-- The lazy file will apply syntax earlier
 	Myutil.lazyfile.setup()
 end
 
 setmetatable(M, {
-    __index = function(_, key)
-        if options == nil then
-            return vim.deepcopy(defaults)[key]
-        end
-        return options[key]
-    end
+	__index = function(_, key)
+		if options == nil then
+			return vim.deepcopy(defaults)[key]
+		end
+		return options[key]
+	end,
 })
 
 return M
