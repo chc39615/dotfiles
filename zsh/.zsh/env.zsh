@@ -8,3 +8,6 @@ SAVEHIST=1000
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
+# add "$HOME/.local/bin/" to PATH
+. "$HOME/.local/bin/env"
+
