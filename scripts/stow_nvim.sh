@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Fix the path to the dotfiles folder
 DOTFILES_DIR="$HOME/dotfiles"

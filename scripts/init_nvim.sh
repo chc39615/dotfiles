@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 # Fix the path to the dotfiles folder
@@ -20,3 +20,7 @@ install_package gzip
 
 # install pyright compiler
 install_package npm
+
+# install c compiler
+install_ccompiler
+

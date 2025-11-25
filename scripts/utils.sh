@@ -1,13 +1,122 @@
+#!/bin/usr/env bash
+
+# ================================
+# Shared Color Definitions
+# ================================
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+BLUE="\033[0;34m"
+NC="\033[0m"  # No color
+
 install_package() {
+    if command -v pacman >/dev/null 2>&1; then
+        install_package_pacman "$1"
+    elif command -v apt >/dev/null 2>&1; then
+        install_package_apt "$1"
+    else
+        echo -e "${RED}Unsupported OS – no pacman or apt found.${NC}"
+        return 1
+    fi
+}
+
+cecho() {
+    local message="$1"
+    local color="$2"
+    echo -e "${color}${message}${NC}"
+}
+
+install_ccompiler() {
+    if command -v pacman >/dev/null 2>&1; then
+        install_package_pacman base-devel
+    elif command -v apt >/dev/null 2>&1; then
+        install_package_apt build-essential
+    else
+        echo -e "${RED}Unsupported OS – no pacman or apt found.${NC}"
+        return 1
+    fi
+}
+
+install_package_apt() {
     PACKAGE_NAME=$1
     INIT_FILE="$HOME/dotfiles/scripts/init_$PACKAGE_NAME.sh"
 
-    # Define color codes
-    RED="\033[0;31m"
-    GREEN="\033[0;32m"
-    YELLOW="\033[0;33m"
-    BLUE="\033[0;34m"
-    NC="\033[0m" # No color
+    if [[ -z "$PACKAGE_NAME" ]]; then
+        echo -e "${RED}Error: No package name provided.${NC}"
+        echo -e "${YELLOW}Usage: install_package <package_name>${NC}"
+        return 1
+    fi
+
+    echo -e "Checking if ${GREEN}$PACKAGE_NAME${NC} is already installed..."
+
+    INSTALLED_VERSION=$(dpkg -l "$PACKAGE_NAME" 2>/dev/null | awk '/^ii/ {print $3}')
+    [[ -z "$INSTALLED_VERSION" ]] && INSTALLED_VERSION="not installed"
+
+    if [[ "$INSTALLED_VERSION" != "not installed" ]]; then
+        echo -e "${GREEN}$PACKAGE_NAME${NC} is already installed."
+        echo -e "Installed version: ${YELLOW}$INSTALLED_VERSION${NC}"
+    else
+        echo -e "${RED}$PACKAGE_NAME is not installed.${NC}"
+    fi
+
+    echo -e "Checking the repository version of $PACKAGE_NAME..."
+    REPO_VERSION=$(apt-cache policy "$PACKAGE_NAME" | grep Candidate | awk '{print $2}')
+    [[ -z "$REPO_VERSION" ]] && REPO_VERSION="Repository version not available."
+
+    echo -e "Repository version: ${YELLOW}$REPO_VERSION${NC}"
+
+    if [[ "$INSTALLED_VERSION" != "not installed" ]]; then
+        if [[ "$INSTALLED_VERSION" == "$REPO_VERSION" ]]; then
+            echo -e "${BLUE}Installed version matches repository version. No action required.${NC}"
+            echo "------------------------------------------------------------"
+            return 0
+        else
+            echo -e "${YELLOW}Installed version does not match the repository version.${NC}"
+            read -p "Do you want to update/reinstall $PACKAGE_NAME? (y/n): " CHOICE
+            if [[ "$CHOICE" != "y" && "$CHOICE" != "Y" ]]; then
+                echo -e "${YELLOW}Skipping installation of $PACKAGE_NAME.${NC}"
+                echo "------------------------------------------------------------"
+                return 0
+            fi
+        fi
+    else
+        read -p "Do you want to install $PACKAGE_NAME? (y/n): " CHOICE
+        if [[ "$CHOICE" != "y" && "$CHOICE" != "Y" ]]; then
+            echo -e "${YELLOW}Skipping installation of $PACKAGE_NAME.${NC}"
+            echo "------------------------------------------------------------"
+            return 0
+        fi
+    fi
+
+    echo -e "${BLUE}Starting installation of $PACKAGE_NAME...${NC}"
+    sudo apt update -y
+    sudo apt install -y "$PACKAGE_NAME"
+
+    if dpkg -l "$PACKAGE_NAME" 2>/dev/null | grep -q '^ii'; then
+        INSTALLED_VERSION=$(dpkg -l "$PACKAGE_NAME" | awk '/^ii/ {print $3}')
+        echo -e "${GREEN}$PACKAGE_NAME${NC} installed successfully! Version: ${YELLOW}$INSTALLED_VERSION${NC}"
+
+        if [[ -f "$INIT_FILE" ]]; then
+            echo -e "${BLUE}Initialization script found: $INIT_FILE. Executing...${NC}"
+            bash "$INIT_FILE" || {
+                echo -e "${RED}Failed to execute $INIT_FILE.${NC}"
+                return 1
+            }
+        else
+            echo -e "${YELLOW}No initialization script for $PACKAGE_NAME.${NC}"
+        fi
+
+        echo "------------------------------------------------------------"
+    else
+        echo -e "${RED}Installation failed. Please try installing $PACKAGE_NAME manually.${NC}"
+        echo "------------------------------------------------------------"
+        return 1
+    fi
+}
+
+install_package_pacman() {
+    PACKAGE_NAME=$1
+    INIT_FILE="$HOME/dotfiles/scripts/init_$PACKAGE_NAME.sh"
 
     if [[ -z "$PACKAGE_NAME" ]]; then
         echo -e "${RED}Error: No package name provided.${NC}"
@@ -103,6 +212,9 @@ install_package() {
         return 1
     fi
 }
+
+
+
 
 # Function to check and add lines to ~/.bashrc
 add_to_bashrc() {

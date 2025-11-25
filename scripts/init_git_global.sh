@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ## ===============================================================
 ## Using libsecret on Linux requires installing a compatible 
