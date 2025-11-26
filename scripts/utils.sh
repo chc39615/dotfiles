@@ -12,8 +12,10 @@ NC="\033[0m"  # No color
 install_package() {
     if command -v pacman >/dev/null 2>&1; then
         install_package_pacman "$1"
+        return $?
     elif command -v apt >/dev/null 2>&1; then
         install_package_apt "$1"
+        return $?
     else
         echo -e "${RED}Unsupported OS – no pacman or apt found.${NC}"
         return 1
@@ -77,6 +79,8 @@ install_package_apt() {
                 echo -e "${YELLOW}Skipping installation of $PACKAGE_NAME.${NC}"
                 echo "------------------------------------------------------------"
                 return 0
+            else
+                return 1
             fi
         fi
     else
@@ -167,6 +171,8 @@ install_package_pacman() {
                 echo -e "${YELLOW}Skipping installation of $PACKAGE_NAME.${NC}"
                 echo "------------------------------------------------------------"
                 return 0
+            else:
+                return 1
             fi
         fi
     else
