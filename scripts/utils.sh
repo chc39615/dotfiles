@@ -28,6 +28,21 @@ cecho() {
     echo -e "${color}${message}${NC}"
 }
 
+check_ccompiler_installed() {
+    # List of common compiler commands to check
+    local compilers=("cc" "gcc" "clang" "cl" "zig")
+
+    for compiler in "${compilers[@]}"; do
+        if command -v "$compiler" >/dev/null 2>&1; then
+            echo -e "${GREEN}Compiler '$compiler' found. Skipping installation.${NC}"
+            return 0 # Return 0 (success) if any compiler is found
+        fi
+    done
+
+    echo "No common C compiler found. Proceeding with installation."
+    return 1 # Return 1 (failure) if no compiler is found
+}
+
 install_ccompiler() {
     if command -v pacman >/dev/null 2>&1; then
         install_package_pacman base-devel

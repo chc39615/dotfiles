@@ -79,4 +79,6 @@ fi
 install_package eza
 
 # install c compiler
-install_ccompiler
+if ! check_ccompiler_installed; then
+    install_ccompiler
+fi 
