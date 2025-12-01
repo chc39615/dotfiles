@@ -71,7 +71,7 @@ return {
 				-- ["*"] = function(server, opts) end,
 			},
 		},
-		config = function(_, opts)
+		config = vim.schedule_wrap(function(_, opts)
 			-- setup autoformat
 			Myutil.format.register(Myutil.lsp.formatter())
 
@@ -85,7 +85,8 @@ return {
 
 			-- setu lsp servers
 			Myutil.lsp.setup_lsp_servers(opts)
-		end,
+
+		end),
 	},
 
 	{
