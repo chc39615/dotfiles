@@ -12,4 +12,5 @@ source ~/.zsh/plugins/zoxide.zsh
 source ~/.zsh/plugins/startship.zsh
 source ~/.zsh/plugins/fzf.zsh
 source ~/.zsh/plugins/eza.zsh
+source ~/.zsh/plugins/zsh-vi-mode
 
