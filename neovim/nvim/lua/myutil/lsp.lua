@@ -101,7 +101,7 @@ function M.on_rename(from, to, rename)
 		if client.supports_method("workspace/didRenameFiles") then
 			print("support workspace/didRenameFiles")
 			client.notify("workspace/didRenameFiles", changes)
-		elseif client.support_method("workspace/fileOperations/didRename") then
+		elseif client.supports_method("workspace/fileOperations/didRename") then
 			print("support workspace/fileOperations/didRename")
 			client.notify("workspace/fileOperations/didRename")
 		else
@@ -161,7 +161,7 @@ function M.setup_lsp_servers(opts)
 			end
 		end
 		-- require("lspconfig")[server].setup(server_opts)
-        vim.lsp.config[server] = server_opts
+		vim.lsp.config[server] = server_opts
 	end
 
 	-- get all the servers that are available through mason-lspconfig
@@ -169,7 +169,7 @@ function M.setup_lsp_servers(opts)
 	local all_mslp_servers = {}
 	if have_mason then
 		-- all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-        all_mslp_servers = require("mason-lspconfig").get_mappings().lspconfig_to_package
+		all_mslp_servers = require("mason-lspconfig").get_mappings().lspconfig_to_package
 	end
 
 	local ensure_installed = {} ---@type string[]
