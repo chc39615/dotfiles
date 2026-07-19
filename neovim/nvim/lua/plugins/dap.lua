@@ -274,9 +274,10 @@ return {
 							program = "${file}",
 							justMyCode = true,
 							console = "integratedTerminal",
+							-- pythonPath = "python",
 							pythonPath = function()
 								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. "/bin/python")
-									or "python3"
+									or "uv run python"
 							end,
 						},
 						{
@@ -286,9 +287,10 @@ return {
 							program = "${file}",
 							justMyCode = false,
 							console = "integratedTerminal",
+							-- pythonPath = "python",
 							pythonPath = function()
 								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. "/bin/python")
-									or "python3"
+									or "uv run python"
 							end,
 						},
 					}
