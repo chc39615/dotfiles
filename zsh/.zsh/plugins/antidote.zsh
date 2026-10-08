@@ -6,26 +6,35 @@
 # auto-suggestion
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-
 # fzf-tab
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons $realpath'
-# zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+# group headers ([files], [directories], [git branches]…); switch groups with < and >
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':fzf-tab:*' switch-group '<' '>'
+# make the active group's label stand out (default is bold only; supported: bold, underline)
+zstyle ':fzf-tab:*' active-group-style bold underline
 
-# 同時支援 cd 和 zoxide
-# zstyle ':fzf-tab:complete:(cd|__zoxide_z):*' fzf-preview 'eza -1 --color=always --icons "$realpath"'
+# all commands (cd too): preview folders with eza, files with bat (first 200 lines)
+zstyle ':fzf-tab:complete:*:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always --icons=always "$realpath" || bat --color=always --style=numbers --decorations=always --line-range=:200 "$realpath" 2>/dev/null'
 
-# 使用 bat (帶有語法高亮的 cat) 來預覽檔案，如果是資料夾就用 eza
-# zstyle ':fzf-tab:complete:*' fzf-preview '[[ -d $realpath ]] && eza -1 --color=always "$realpath" || bat --color=always --style=numbers "$realpath"'
+# multi-select: Ctrl-X marks an item and moves down (default Ctrl-Space is taken by macOS input-source switching)
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-x:toggle+down'
 
+# keep git branches/tags in git's own order instead of alphabetical
+zstyle ':completion:*:git-checkout:*' sort false
 
-# 1. 關鍵設定：強迫 Zsh 補全系統把 zoxide 的輸出當作實體路徑（這樣 $realpath 才會生效）
-zstyle ':fzf-tab:complete:(__zoxide_z|__zoxide_zi):*' file-path 'true'
+# environment variables: show the value  (echo $PA<Tab>, export <Tab>, unset <Tab>)
+zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-preview 'echo ${(P)word}'
 
-# 2. 您原本的優化預覽（加上 file-path 後，這裡的 $realpath 就能 100% 抓到絕對路徑）
-zstyle ':fzf-tab:complete:(__zoxide_z|__zoxide_zi):*' fzf-preview 'eza -1 --color=always "$realpath"'
+# git: show the diff when picking files, recent commits when picking a branch/tag
+zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff --color=always -- $word'
+zstyle ':fzf-tab:complete:git-(checkout|switch|log):*' fzf-preview 'git log --oneline --color=always -20 $word'
 
-# 3. 如果您希望連「空格」都不想打，直接 z <關鍵字><Tab> 就撈資料庫，再加這行：
-zstyle ':fzf-tab:complete:(__zoxide_z|__zoxide_zi):*' fake-compadd '$(zoxide query -l)'
+# inside tmux: open the list in a tmux popup instead of under the prompt
+[[ -n $TMUX ]] && zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# popup is sized to fit the list (tiny for short lists); force a minimum width/height (cols rows),
+# automatically capped to the tmux window width and the space above/below the cursor
+zstyle ':fzf-tab:*' popup-min-size 120 30
+
 
 # =========================================================================================
 
