@@ -32,11 +32,7 @@ alias nowd='date +"%Y-%m-%d"'
 alias df='df -h'
 alias dusage='du -sh * 2>/dev/null'
 
-# initial tools 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-
-eval "$(pyenv init - bash)"
+# initial tools
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"

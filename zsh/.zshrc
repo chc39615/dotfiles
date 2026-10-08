@@ -9,7 +9,6 @@ source ~/.zsh/alias.zsh
 
 # Source plugin configurations
 source ~/.zsh/plugins/antidote.zsh
-source ~/.zsh/plugins/pyenv.zsh
 source ~/.zsh/plugins/zoxide.zsh
 source ~/.zsh/plugins/startship.zsh
 source ~/.zsh/plugins/eza.zsh
