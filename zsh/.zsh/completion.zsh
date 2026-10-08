@@ -1,9 +1,8 @@
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/cody/.zshrc'
-
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
-# Enable case-insensitive (and partial) tab completion
+# Enable case-insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
+# Select from the completion list with Tab / arrow keys
+zstyle ':completion:*' menu select
