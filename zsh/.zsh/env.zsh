@@ -1,8 +1,22 @@
-# Lines configured by zsh-newuser-install
+# history
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-# End of lines configured by zsh-newuser-install
+HISTSIZE=100000
+SAVEHIST=100000
+setopt EXTENDED_HISTORY       # save timestamp + duration with each command
+setopt SHARE_HISTORY          # write immediately, and all tabs/panes see each other's commands
+setopt HIST_IGNORE_ALL_DUPS   # re-running a command removes its older copy
+setopt HIST_IGNORE_SPACE      # a command starting with a space isn't saved (for secrets)
+setopt HIST_REDUCE_BLANKS     # trim extra spaces before saving
+
+# don't write commands that look like they contain secrets to ~/.histfile
+# (return 2 = keep in this shell's memory for ↑, but never write to the file)
+_hist_skip_secrets() {
+  setopt localoptions extendedglob
+  [[ $1 == (#i)*(password|passwd|token|secret|api[_-]#key|bearer)* ]] && return 2
+  return 0
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook zshaddhistory _hist_skip_secrets
 
 # set locale
 export LANG="en_US.UTF-8"
