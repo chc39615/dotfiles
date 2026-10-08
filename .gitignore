@@ -1,3 +1,4 @@
 backup/
 tmux/.tmux/plugins
 zed/zed/prompts/
+.DS_Store
