@@ -6,11 +6,11 @@ source ~/.zsh/alias.zsh
 
 
 # Source plugin configurations
-source ~/.zsh/plugins/zplug.zsh
+source ~/.zsh/plugins/antidote.zsh
 source ~/.zsh/plugins/pyenv.zsh
 source ~/.zsh/plugins/zoxide.zsh
 source ~/.zsh/plugins/startship.zsh
-source ~/.zsh/plugins/fzf.zsh
+# zsh-vi-mode resets keybindings on init, so fzf (Ctrl-R/Ctrl-T) must bind after it
+zvm_after_init_commands+=('source ~/.zsh/plugins/fzf.zsh')
 source ~/.zsh/plugins/eza.zsh
-source ~/.zsh/plugins/zsh-vi-mode
 

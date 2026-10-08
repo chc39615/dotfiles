@@ -68,6 +68,10 @@ else
     echo "autosetuprebase setting skipped."
 fi
 
+# Line endings: keep LF on checkout, convert CRLF -> LF on commit (all OSes, incl. Windows)
+# Repos that need specific endings should set them in .gitattributes
+git config --global core.autocrlf input
+
 # Configure credential helper
 echo "Configuring Git credential helper to '$credential_helper'..."
 git config --global credential.helper "$credential_helper"
@@ -80,6 +84,7 @@ if git config --global branch.autosetuprebase &> /dev/null; then
     echo "autosetuprebase: $(git config --global branch.autosetuprebase)"
 fi
 echo "Credential helper: $(git config --global credential.helper)"
+echo "core.autocrlf: $(git config --global core.autocrlf)"
 
 echo "Git configuration complete!"
 
