@@ -1,5 +1,7 @@
 # Source the base configuration
 source ~/.zsh/env.zsh
+# file colors for eza + zsh completion/fzf-tab (generated once by `vivid generate tokyonight-storm`)
+source ~/.zsh/ls_colors.zsh
 source ~/.zsh/options.zsh
 source ~/.zsh/completion.zsh
 source ~/.zsh/alias.zsh
