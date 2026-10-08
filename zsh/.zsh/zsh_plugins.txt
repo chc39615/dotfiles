@@ -1,5 +1,5 @@
 # antidote plugin list — one plugin per line, loaded top to bottom
 # add/remove a line, then `exec zsh`; update all with `antidote update`
-jeffreytse/zsh-vi-mode
+aloxaf/fzf-tab                       # after compinit, before widget-wrapping plugins
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting    # must stay last
