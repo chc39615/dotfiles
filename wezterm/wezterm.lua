@@ -30,6 +30,11 @@ config.font_size = 16
 
 config.native_macos_fullscreen_mode = true
 
+-- make both Option keys act as Meta, so Alt-B/Alt-F move by word in the shell
+-- (default: only left Option; right Option types ∫/ƒ — Corne-ish Zen sends right Alt)
+config.send_composed_key_when_left_alt_is_pressed = false
+config.send_composed_key_when_right_alt_is_pressed = false
+
 -- config.default_prog = { "powershell.exe", "-NoLogo" }
 
 config.window_padding = {
