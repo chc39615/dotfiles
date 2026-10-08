@@ -1,40 +1,9 @@
 unsetopt beep
 # vi mode is handled by the zsh-vi-mode plugin (~/.zsh/zsh_plugins.txt)
 
-
 # fix
 # starship_zle-keymap-select-wrapped:1: maximum nested function level reached; increase FUNCNEST?
 function zle-keymap-select {
     zle reset-prompt
 }
 zle -N zle-keymap-select
-
-# Unbind common Ctrl+Arrow key sequences
-bindkey -r '^[[1;5D'  # Ctrl+Left
-bindkey -r '^[[1;5C'  # Ctrl+Right
-bindkey -r '^[[1;5A'  # Ctrl+Up
-bindkey -r '^[[1;5B'  # Ctrl+Down
-
-# autoload: tells Zsh to load a function from disk only when it's first used (lazy loading).
-# -U: disables alias expansion for the function (safer, avoids issues with overridden names).
-# -z: tells Zsh this is a Zsh function, not a shell script.
-# autoload -Uz up-line-or-history down-line-or-history
-# bindkey "^[[A" up-line-or-history # up-line-or-history
-# bindkey "^[[B" down-line-or-history # down-line-or-history
-
-# bindkey -r "^[[A" # up-line-or-history
-# bindkey -r "^[[B" # down-line-or-history
-# bindkey -r "^[[C" # vi-forward-char
-# bindkey -r "^[[D" # vi-backward-char
-
-# Alternate sequences (some terminals/tmux versions send these)
-bindkey -r '^[OD'     # Sometimes Ctrl+Left
-bindkey -r '^[OC'     # Sometimes Ctrl+Right
-bindkey -r '^[OA'     # Sometimes Ctrl+Up
-bindkey -r '^[OB'     # Sometimes Ctrl+Down
-
-# Even more variants seen in tmux or macOS Terminal
-# bindkey -r '^[1;9D'
-# bindkey -r '^[1;9C'
-# bindkey -r '^[1;9A'
-# bindkey -r '^[1;9B'
