@@ -23,8 +23,8 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
 # set default editor
-export VISUAL=/opt/homebrew/bin/nvim
-export EDITOR=/opt/homebrew/bin/nvim
+export VISUAL=nvim
+export EDITOR=nvim
 
 # add "$HOME/.local/bin/" to PATH
 . "$HOME/.local/bin/env"
