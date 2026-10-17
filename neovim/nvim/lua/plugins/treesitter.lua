@@ -2,6 +2,9 @@ return {
 	{ "tpope/vim-repeat" },
 	{
 		"nvim-treesitter/nvim-treesitter",
+		-- upstream's default branch is now `main` (a rewrite without nvim-treesitter.query_predicates /
+		-- nvim-treesitter.configs); this config is written for `master`, so don't let :Lazy update switch branches
+		branch = "master",
 		version = false, -- last release is way too old and doesn't work on Windows
 		build = ":TSUpdate",
 		event = { "LazyFile", "VeryLazy" },
@@ -143,6 +146,7 @@ return {
 
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "master", -- must match nvim-treesitter's branch (see above)
 		event = "VeryLazy",
 		enabled = true,
 		config = function()
