@@ -13,7 +13,8 @@ end
 -- 先用一陣子, 看看有沒有需要把整個 git_files 換成 files
 local function is_git_repo()
 	-- Run a git command to check if the current directory is a git repository
-	local handle = io.popen("git rev-parse --is-inside-work-tree 2>/dev/null")
+	local null = Myutil.is_win() and "NUL" or "/dev/null"
+	local handle = io.popen("git rev-parse --is-inside-work-tree 2>" .. null)
 	if handle == nil then
 		return false -- Return false if popen fails (e.g., git not installed)
 	end

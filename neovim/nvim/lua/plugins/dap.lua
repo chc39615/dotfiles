@@ -276,7 +276,8 @@ return {
 							console = "integratedTerminal",
 							-- pythonPath = "python",
 							pythonPath = function()
-								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. "/bin/python")
+								local py = Myutil.is_win() and "/Scripts/python.exe" or "/bin/python"
+								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. py)
 									or "uv run python"
 							end,
 						},
@@ -289,7 +290,8 @@ return {
 							console = "integratedTerminal",
 							-- pythonPath = "python",
 							pythonPath = function()
-								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. "/bin/python")
+								local py = Myutil.is_win() and "/Scripts/python.exe" or "/bin/python"
+								return os.getenv("VIRTUAL_ENV") and (os.getenv("VIRTUAL_ENV") .. py)
 									or "uv run python"
 							end,
 						},

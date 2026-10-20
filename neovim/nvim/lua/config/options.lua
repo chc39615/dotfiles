@@ -6,7 +6,7 @@ local opt = vim.opt
 -- use swap file
 opt.swapfile = true
 -- swap file location
-opt.dir = "/tmp"
+opt.dir = Myutil.is_win() and vim.env.TEMP or "/tmp"
 
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
 
