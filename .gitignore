@@ -2,3 +2,4 @@ backup/
 tmux/.tmux/plugins
 zed/zed/prompts/
 .DS_Store
+neovim/nvim/lazy-lock.json
