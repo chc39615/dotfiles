@@ -144,6 +144,10 @@ function M.init()
 
 	M.did_init = true
 	M.load("options")
+	-- configs for neovide
+	if vim.g.neovide then
+		M.load("gui")
+	end
 
 	-- defer built-in clipboard handling: "xsel" and "pbcopy" can be slow
 	-- the clipboard will load at config.setup()
