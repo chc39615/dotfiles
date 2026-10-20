@@ -2,7 +2,8 @@ return {
 	{
 		-- for fzf in the quickfix list
 		"junegunn/fzf",
-		build = "./install --bin",
+		-- Windows: use fzf.exe from PATH (winget); the bash installer can't run there
+		build = vim.fn.has("win32") == 0 and "./install --bin" or nil,
 		dependencies = {
 			"junegunn/fzf.vim",
 		},

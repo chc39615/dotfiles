@@ -169,7 +169,9 @@ function M.setup_lsp_servers(opts)
 	local all_mslp_servers = {}
 	if have_mason then
 		-- all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-		all_mslp_servers = require("mason-lspconfig").get_mappings().lspconfig_to_package
+		-- v2 uses `lspconfig_to_package`, v1 uses `lspconfig_to_mason`; keys are the lspconfig server names
+		local mappings = require("mason-lspconfig").get_mappings()
+		all_mslp_servers = vim.tbl_keys(mappings.lspconfig_to_package or mappings.lspconfig_to_mason or {})
 	end
 
 	local ensure_installed = {} ---@type string[]
