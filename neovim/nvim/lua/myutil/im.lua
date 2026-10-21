@@ -17,7 +17,7 @@ local bin = vim.fn.stdpath("config") .. "/bin"
 
 ---@class ImBackend
 ---@field name string
----@field english string
+---@field english string? nil until known (macOS detects it asynchronously)
 ---@field get string[]
 ---@field set fun(id: string, to_english: boolean): string[]
 
@@ -47,7 +47,7 @@ local function detect()
 		if ex(exe) then
 			return {
 				name = "macism",
-				english = "com.apple.keylayout.ABC",
+				english = nil, -- detected in setup() (ABC / U.S. / ...), or vim.g.im_select_english
 				get = { exe },
 				-- switching to a non-CJK source doesn't need macism's workaround ("0" = skip it, faster)
 				set = function(id, to_english)
@@ -178,7 +178,16 @@ function M.setup(group)
 		local b = M.backend
 		b.english = nil -- leave()/enter() wait until we know the layout
 		mac_english(function(id)
-			b.english = id or "com.apple.keylayout.ABC"
+			if id then
+				b.english = id
+				return
+			end
+			-- don't guess (ABC vs U.S. differ per Mac): a wrong id would silently stop switching
+			M.backend = nil
+			Myutil.warn(
+				"im-select: couldn't detect the macOS English keyboard layout, auto switch is off.\n"
+					.. 'Set vim.g.im_select_english (e.g. "com.apple.keylayout.US") to enable it.'
+			)
 		end)
 	end
 
