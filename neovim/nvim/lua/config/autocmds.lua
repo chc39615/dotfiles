@@ -87,17 +87,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
--- Auto switch input method to english
--- vim.api.nvim_create_autocmd({ "InsertLeave" }, {
--- 	group = augroup("switch_im"),
--- 	callback = function()
--- 		local sysname = vim.loop.os_uname().sysname
--- 		local is_windows = string.find(sysname:lower(), "windows")
--- 		if is_windows then
--- 			local has_im_select = vim.fn.executable("im-select.exe") == 1
--- 			if has_im_select then
--- 				vim.fn.system("im-select.exe 1033")
--- 			end
--- 		end
--- 	end,
--- })
+-- Auto switch input method: English outside insert mode, restore on InsertEnter
+-- (Windows/macOS/Linux, disabled over SSH; see lua/myutil/im.lua)
+Myutil.im.setup(augroup("switch_im"))

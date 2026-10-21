@@ -1,3 +1,5 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 *.cmd text eol=crlf
+# vendored executables (im-select.exe, macism)
+neovim/nvim/bin/** binary
