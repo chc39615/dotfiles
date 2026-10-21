@@ -2,7 +2,8 @@
 --
 -- Backends (no extra install; binaries are vendored in nvim/bin):
 --   Windows  bin/win/im-select.exe  (daipeihust/im-select, MIT) - switches keyboard layout, needs en-US (1033)
---   macOS    bin/mac/macism         (laishulu/macism, MIT)      - Apple Silicon build
+--   macOS    bin/mac/macism         (laishulu/macism, MIT)      - Apple Silicon build;
+--            the English layout (ABC / U.S. / ...) is read from com.apple.HIToolbox at startup
 --   Linux    fcitx5-remote / fcitx-remote / ibus from the system IM framework
 -- Disabled in SSH sessions: the IME lives on the client, not on the machine running nvim.
 --
@@ -99,11 +100,44 @@ local function run(cmd, cb)
 	end
 end
 
+-- macOS: the English layout differs per machine (ABC vs U.S. ...), so read it from HIToolbox prefs.
+-- 1. AppleCurrentKeyboardLayoutInputSourceID holds the full id (e.g. com.apple.keylayout.US)
+-- 2. else the first "Keyboard Layout" in AppleEnabledInputSources: "U.S." -> US, ABC -> ABC
+---@param cb fun(id: string?)
+local function mac_english(cb)
+	local function read(key, on_out)
+		local ok = pcall(vim.system, { "defaults", "read", "com.apple.HIToolbox", key }, { text = true }, function(o)
+			vim.schedule(function()
+				on_out(o.code == 0 and o.stdout or "")
+			end)
+		end)
+		if not ok then
+			cb(nil)
+		end
+	end
+	read("AppleCurrentKeyboardLayoutInputSourceID", function(out)
+		local id = vim.trim(out)
+		if id:find("^com%.apple%.keylayout%.") then
+			return cb(id)
+		end
+		read("AppleEnabledInputSources", function(list)
+			-- matches both `= "U.S.";` and `= ABC;`
+			local name = list:match('"KeyboardLayout Name" = "?([^";]+)"?;')
+			if not name then
+				return cb(nil)
+			end
+			local known = { ["U.S."] = "US", ABC = "ABC" }
+			local suffix = known[name] or name:gsub("[%s%.]", "")
+			cb("com.apple.keylayout." .. suffix)
+		end)
+	end)
+end
+
 --- Switch to English. With `remember`, keep the current IM so enter() can restore it.
 ---@param remember? boolean
 function M.leave(remember)
 	local b = M.backend
-	if not b then
+	if not (b and b.english) then -- english is nil while macOS detection is still running
 		return
 	end
 	seq = seq + 1
@@ -125,7 +159,7 @@ end
 --- Restore the IM that was active when insert mode was last left.
 function M.enter()
 	local b = M.backend
-	if not b then
+	if not (b and b.english) then
 		return
 	end
 	seq = seq + 1
@@ -145,6 +179,12 @@ function M.setup(group)
 	end
 	if vim.g.im_select_english then
 		M.backend.english = vim.g.im_select_english
+	elseif M.backend.name == "macism" then
+		local b = M.backend
+		b.english = nil -- leave()/enter() wait until we know the layout
+		mac_english(function(id)
+			b.english = id or "com.apple.keylayout.ABC"
+		end)
 	end
 
 	vim.api.nvim_create_autocmd("InsertLeave", {
