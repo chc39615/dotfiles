@@ -101,8 +101,9 @@ local function run(cmd, cb)
 end
 
 -- macOS: the English layout differs per machine (ABC vs U.S. ...), so read it from HIToolbox prefs.
--- 1. AppleCurrentKeyboardLayoutInputSourceID holds the full id (e.g. com.apple.keylayout.US)
--- 2. else the first "Keyboard Layout" in AppleEnabledInputSources: "U.S." -> US, ABC -> ABC
+-- Use the first enabled "Keyboard Layout" in AppleEnabledInputSources ("U.S." -> US, ABC -> ABC).
+-- Not AppleCurrentKeyboardLayoutInputSourceID: it follows the active IME, so starting nvim while on
+-- Cangjie yields com.apple.keylayout.CangjieKeyboard and "English" would switch to Cangjie.
 ---@param cb fun(id: string?)
 local function mac_english(cb)
 	local function read(key, on_out)
@@ -115,21 +116,15 @@ local function mac_english(cb)
 			cb(nil)
 		end
 	end
-	read("AppleCurrentKeyboardLayoutInputSourceID", function(out)
-		local id = vim.trim(out)
-		if id:find("^com%.apple%.keylayout%.") then
-			return cb(id)
+	read("AppleEnabledInputSources", function(list)
+		-- only "Keyboard Layout" entries carry a KeyboardLayout Name; matches `= "U.S.";` and `= ABC;`
+		local name = list:match('"KeyboardLayout Name" = "?([^";]+)"?;')
+		if not name then
+			return cb(nil)
 		end
-		read("AppleEnabledInputSources", function(list)
-			-- matches both `= "U.S.";` and `= ABC;`
-			local name = list:match('"KeyboardLayout Name" = "?([^";]+)"?;')
-			if not name then
-				return cb(nil)
-			end
-			local known = { ["U.S."] = "US", ABC = "ABC" }
-			local suffix = known[name] or name:gsub("[%s%.]", "")
-			cb("com.apple.keylayout." .. suffix)
-		end)
+		local known = { ["U.S."] = "US", ABC = "ABC" }
+		local suffix = known[name] or name:gsub("[%s%.]", "")
+		cb("com.apple.keylayout." .. suffix)
 	end)
 end
 
