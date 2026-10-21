@@ -90,3 +90,47 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 -- Auto switch input method: English outside insert mode, restore on InsertEnter
 -- (Windows/macOS/Linux, disabled over SSH; see lua/myutil/im.lua)
 Myutil.im.setup(augroup("switch_im"))
+
+-- Ask to convert Big5 (cp950) files to UTF-8; only the buffer's fileencoding changes, nothing is written until :w
+local function ask_big5_to_utf8(buf)
+	local bo = vim.bo[buf]
+	if bo.fileencoding ~= "cp950" or bo.buftype ~= "" or not bo.modifiable or vim.b[buf].big5_asked then
+		return
+	end
+	vim.b[buf].big5_asked = true -- don't ask again on :e for this buffer
+	-- during startup (e.g. `nvim file.txt`) wait for VeryLazy: the UI is ready (Neovide showed only the
+	-- first line of the built-in inputlist) and vim.ui.select has been replaced by fzf-lua by then
+	local later = vim.v.vim_did_enter == 1 and vim.schedule or function(fn)
+		Myutil.on_very_lazy(function()
+			vim.schedule(fn)
+		end)
+	end
+	later(function()
+		if not vim.api.nvim_buf_is_valid(buf) then
+			return
+		end
+		local name = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
+		vim.ui.select({ "Convert to UTF-8", "Convert to UTF-8 with BOM", "Keep Big5 (cp950)" }, {
+			prompt = name .. " is Big5 (cp950): ",
+		}, function(_, idx)
+			if not idx or idx == 3 then
+				return
+			end
+			vim.bo[buf].fileencoding = "utf-8"
+			vim.bo[buf].bomb = idx == 2
+			Myutil.info("Will be saved as UTF-8" .. (idx == 2 and " with BOM" or "") .. " on :w")
+		end)
+	end)
+end
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = augroup("big5_to_utf8"),
+	callback = function(ev)
+		ask_big5_to_utf8(ev.buf)
+	end,
+})
+-- autocmds may load after the first file was read (e.g. `nvim file.txt`), so check loaded buffers too
+for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+	if vim.api.nvim_buf_is_loaded(buf) then
+		ask_big5_to_utf8(buf)
+	end
+end
