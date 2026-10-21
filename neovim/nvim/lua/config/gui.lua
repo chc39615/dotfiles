@@ -22,6 +22,10 @@ vim.keymap.set({ "n", "v", "i" }, "<" .. mod .. "-0>", function()
 	vim.g.neovide_scale_factor = 1.0
 end)
 
+-- right click pastes in the command line (in the TUI the terminal does this; Neovide has no terminal)
+-- <C-r><C-r> inserts the clipboard literally instead of as typed keys
+vim.keymap.set("c", "<RightMouse>", "<C-r><C-r>+", { desc = "Paste clipboard" })
+
 -- bookmark folders: pick one -> cd into it -> find files there
 -- stored per machine (not in dotfiles), one folder per line; edit it by hand if you like
 local bookmark_file = vim.fn.stdpath("data") .. "/bookmarks.txt"
