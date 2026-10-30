@@ -116,8 +116,19 @@ vim.keymap.set("n", "<leader>fs", open_start, { desc = "Start menu" })
 vim.api.nvim_create_autocmd("VimEnter", {
 	once = true,
 	callback = function()
-		if vim.fn.argc(-1) == 0 and vim.api.nvim_buf_get_name(0) == "" then
-			vim.schedule(open_start)
+		if vim.fn.argc(-1) ~= 0 then
+			return
 		end
+		-- Finder "Open With" / double-click sends the file to Neovide after VimEnter (argc is 0),
+		-- so wait a bit and only show the menu if no file buffer showed up.
+		-- ponytail: fixed 300ms wait; bump it if a slow open still races the menu
+		vim.defer_fn(function()
+			for _, b in ipairs(vim.api.nvim_list_bufs()) do
+				if vim.bo[b].buflisted and vim.api.nvim_buf_get_name(b) ~= "" then
+					return
+				end
+			end
+			open_start()
+		end, 300)
 	end,
 })
