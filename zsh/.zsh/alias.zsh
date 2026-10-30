@@ -39,6 +39,3 @@ alias du='du -ch'
 ## git
 alias gitlog='git log --oneline -10'
 
-## nvim clipboard: toggle DISPLAY to switch xclip on/off in a long-lived tmux pane
-alias imssh='export DISPLAY=localhost:10.1'
-alias imlocal='unset DISPLAY'
