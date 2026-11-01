@@ -61,6 +61,48 @@ return {
                 nerd_font_variant = "mono",
             }
 
+            -- cmdline completion: only up/down navigate the list; Enter selects without executing
+            opts.cmdline = vim.tbl_deep_extend("force", opts.cmdline or {}, {
+                keymap = {
+                    preset = "cmdline",
+                    ["<Up>"] = { "select_prev", "fallback" },
+                    ["<Down>"] = { "select_next", "fallback" },
+                    ["<Tab>"] = { "select_and_accept", "fallback" },
+                    ["<S-Tab>"] = {
+                        function(cmp)
+                            if cmp.is_menu_visible() then
+                                cmp.select_prev()
+                                cmp.accept()
+                                return true
+                            end
+                        end,
+                        "fallback",
+                    },
+                    ["<Right>"] = { "fallback" },
+                    ["<Left>"] = { "fallback" },
+                    ["<Esc>"] = {
+                        function(cmp)
+                            if cmp.is_menu_visible() then
+                                cmp.hide()
+                                return true
+                            end
+                        end,
+                        "fallback",
+                    },
+                },
+                completion = {
+                    list = {
+                        selection = {
+                            preselect = true,
+                            auto_insert = false,
+                        },
+                    },
+                    menu = {
+                        auto_show = true,
+                    },
+                },
+            })
+
             return opts
         end,
 
