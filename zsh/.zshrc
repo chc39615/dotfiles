@@ -1,5 +1,8 @@
 # Source the base configuration
 source ~/.zsh/env.zsh
+
+# Local secrets (gitignored, machine-specific). Create from ~/.zsh/secrets.zsh.example
+[[ -f ~/.zsh/secrets.zsh ]] && source ~/.zsh/secrets.zsh
 # file colors for eza + zsh completion/fzf-tab (generated once by `vivid generate tokyonight-storm`)
 source ~/.zsh/ls_colors.zsh
 source ~/.zsh/options.zsh

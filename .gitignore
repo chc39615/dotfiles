@@ -3,3 +3,7 @@ tmux/.tmux/plugins
 zed/zed/prompts/
 .DS_Store
 neovim/nvim/lazy-lock.json
+
+# local secrets (never commit) — see zsh/.zsh/secrets.zsh.example
+zsh/.zsh/secrets.zsh
+zsh/.zsh/*.local.zsh
