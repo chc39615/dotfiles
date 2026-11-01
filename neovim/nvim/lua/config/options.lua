@@ -59,6 +59,11 @@ opt.clipboard = "unnamed,unnamedplus"
 -- mouse
 opt.mouse = "a"
 
+-- command-line completion: show a vertical popup menu navigated with up/down
+-- instead of the horizontal wildmenu (left/right)
+opt.wildmenu = true
+opt.wildoptions = "pum"
+opt.wildmode = { "longest:full", "full" }
 -- file encodings tried in order when reading; keep utf-8 before cp950 (Big5) so UTF-8 isn't misdetected
 -- latin1 never fails: landing there means none of the others decoded cleanly (check with :set fenc?)
 opt.fileencodings = { "ucs-bom", "utf-8", "cp950", "latin1" }
